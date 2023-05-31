@@ -1,1 +1,1 @@
-RwaR - rust wasm w/ react
+FrwaR - frontend rust wasm w/ react
