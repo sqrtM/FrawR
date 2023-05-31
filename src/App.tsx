@@ -1,15 +1,16 @@
-import init, { build_map } from "rustlib";
+import init, { World } from "rustlib";
 
 export default function App() {
 
-
+  let map;
+  init().then(() => {
+   let w = (World.build_map());
+   console.log(w.render());
+  })
   return (
     <>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => init().then(() => { build_map() })}>
-          count
-        </button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
