@@ -1,14 +1,13 @@
 import init, { build_map } from "rustlib";
-import './App.css'
 
-function App() {  
+export default function App() {
 
 
   return (
     <>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => init().then(() => {build_map()})}>
+        <button onClick={() => init().then(() => { build_map() })}>
           count
         </button>
         <p>
@@ -21,5 +20,3 @@ function App() {
     </>
   )
 }
-
-export default App
