@@ -1,5 +1,6 @@
 FrwaR - frontend rust wasm w/ react
 
+![image](https://github.com/sqrtM/FrawR/assets/79169638/6982f336-00c7-4158-b5df-e56cd699b024)
 
 
 tricks:
