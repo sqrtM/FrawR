@@ -1,22 +1,49 @@
-import init, { World } from "rustlib";
+import { useEffect, useState } from "react";
+import init, { World, Tile, } from "rustlib";
 
 export default function App() {
 
-  let map;
-  init().then(() => {
-   let w = (World.build_map());
-   console.log(w.render());
-  })
-  return (
+  const [map, setMap] = useState<Tile[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  let dim = 100;
+
+
+  useEffect(() => {
+    setLoading(true)
+    init().then(() => {
+      let w = (World.build_map(dim * 1.5, dim).render()) as Tile[];
+      setMap(w);
+    })
+    setLoading(false)
+    console.log(map)
+  }, []);
+  
+  return loading ? <span>uhh</span> : (
     <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+      <p>
+        {
+          map.map((i, index) => {
+            if ((index + 1) % (dim * 1.5) === 0) {
+              return (
+              <>
+                <span key={"f"+index+i.val} style={{"color": `#${((index % dim) * 9) + 100}`}}>
+                  {i.char}
+                </span>
+                <br />
+              </>
+              )
+            } else {
+              return (
+                <>
+                  <span key={"f"+index+i.val} style={{"color": `#${((index % dim) * 9) + 100}`}}>
+                    {i.char}
+                  </span>
+                </>
+                )
+            }
+          })
+        }
       </p>
     </>
   )

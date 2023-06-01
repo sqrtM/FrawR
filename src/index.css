@@ -1,7 +1,23 @@
+@font-face {
+  font-family: square;
+  src: url("../public/square.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  margin: 0;
+  /* square font by 
+     https://strlen.com/square/*/
+  font-family: square, 'Courier New', Courier, monospace;
+  font-size: 26px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  /* -ms-user-select:none; */
+  user-select: none;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
