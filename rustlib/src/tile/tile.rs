@@ -1,12 +1,20 @@
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 use wasm_bindgen::prelude::wasm_bindgen;
 
 #[wasm_bindgen]
 #[derive(Clone, Copy, Debug, PartialEq, Serialize)]
 pub struct Tile {
-    pub val: f64,
+    pub val: i16,
     pub name: TileType,
-    pub char: char
+    pub location: Point,
+    pub char: char,
+}
+
+#[wasm_bindgen]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize, Ord, PartialOrd, Eq)]
+pub struct Point {
+    pub x: i32,
+    pub y: i32,
 }
 
 #[repr(u8)]
@@ -15,13 +23,5 @@ pub struct Tile {
 pub enum TileType {
     Floor = 0,
     Slope = 1,
-    Wall = 2
-}
-
-#[repr(u8)]
-#[derive(Clone, Copy, Debug, PartialEq, Serialize)]
-pub enum TileChar {
-    Floor = b'.',
-    Slope = b'/',
-    Wall = b'#',
+    Wall = 2,
 }

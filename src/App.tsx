@@ -1,50 +1,39 @@
 import { useEffect, useState } from "react";
-import init, { World, Tile, } from "rustlib";
+import init, { World, } from "rustlib";
+import TileMap from "./components/TileMap";
 
-export default function App() {
+export default function App(): React.JSX.Element {
 
-  const [map, setMap] = useState<Tile[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [world, setWorld] = useState<World>();
 
-  let dim = 100;
-
+  let height = 100;
+  let width = 100;
 
   useEffect(() => {
-    setLoading(true)
     init().then(() => {
-      let w = (World.build_map(dim * 1.5, dim).render()) as Tile[];
-      setMap(w);
+      const w = new World;
+      w.build_map(height, width, 53983);
+      w.set_entities();
+      setWorld(w);
+      w.sort_entities();
+      console.log(w.get_tiles())
+      console.log(w.get_entities());
     })
-    setLoading(false)
-    console.log(map)
-  }, []);
-  
-  return loading ? <span>uhh</span> : (
+  }, [])
+
+
+  return world ? (
     <>
-      <p>
-        {
-          map.map((i, index) => {
-            if ((index + 1) % (dim * 1.5) === 0) {
-              return (
-              <>
-                <span key={"f"+index+i.val} style={{"color": `#${((index % dim) * 9) + 100}`}}>
-                  {i.char}
-                </span>
-                <br />
-              </>
-              )
-            } else {
-              return (
-                <>
-                  <span key={"f"+index+i.val} style={{"color": `#${((index % dim) * 9) + 100}`}}>
-                    {i.char}
-                  </span>
-                </>
-                )
-            }
-          })
-        }
-      </p>
+      <div style={{ backgroundColor: "red" }}>
+        henlo testing testing
+      </div>
+      <div key="tilemap" id="tilemap">
+        <TileMap tileArray={world.get_tiles()} width={width} />
+      </div>
     </>
+  ) : (
+    <div style={{ backgroundColor: "blue" }}>
+      LOADING
+    </div>
   )
 }
