@@ -1,6 +1,8 @@
 mod entity;
 mod tile;
 
+use std::cmp::Ordering;
+
 use entity::entity::Entity;
 use noise::{self, NoiseFn};
 use serde::Serialize;
@@ -52,38 +54,19 @@ impl World {
     }
 
     pub fn set_entities(&mut self) {
-        self.entities = vec![
-            Entity {
-                location: Point { x: 5, y: 5 },
-            },
-            Entity {
-                location: Point { x: 32, y: 77 },
-            },
-            Entity {
-                location: Point { x: 42, y: 33 },
-            },
-            Entity {
-                location: Point { x: 35, y: 5 },
-            },
-            Entity {
-                location: Point { x: 19, y: 19 },
-            },
-            Entity {
-                location: Point { x: 34, y: 43 },
-            },
-            Entity {
-                location: Point { x: 99, y: 80 },
-            },
-            Entity {
-                location: Point { x: 77, y: 66 },
-            },
-            Entity {
-                location: Point { x: 55, y: 54 },
-            },
-            Entity {
-                location: Point { x: 53, y: 1 },
-            },
-        ]
+        self.entities = Vec::new();
+        self.entities.push(Entity {
+            location: Point { x: 50, y: 50 },
+            char: '@',
+            id: self.entities.len() as u32,
+        });
+        for i in 0..29 {
+            self.entities.push(Entity {
+                location: Point { x: i, y: i },
+                char: 'M',
+                id: self.entities.len() as u32,
+            })
+        }
     }
 
     #[wasm_bindgen(constructor)]
@@ -102,12 +85,23 @@ impl World {
         serde_wasm_bindgen::to_value(&self.tiles).unwrap()
     }
 
-    /// returns sorted by row.
-    /// one line andy
+    /// sorts by row, then by col
     pub fn sort_entities(&mut self) {
-        let _ = &self
-            .entities
-            .sort_by(|a, b| a.location.y.cmp(&b.location.y));
+        let _ = &self.entities.sort_unstable_by(|a, b| {
+            if a.location.y < b.location.y {
+                Ordering::Less
+            } else if a.location.y == b.location.y {
+                if a.location.x < b.location.x {
+                    Ordering::Less
+                } else if a.location.x == b.location.x {
+                    Ordering::Equal
+                } else {
+                    Ordering::Greater
+                }
+            } else {
+                Ordering::Greater
+            }
+        });
     }
 }
 

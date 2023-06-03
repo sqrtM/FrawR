@@ -2,22 +2,20 @@ import { useEffect, useState } from "react";
 import init, { World, } from "rustlib";
 import TileMap from "./components/TileMap";
 
+let height = 100;
+let width = 100;
+
 export default function App(): React.JSX.Element {
 
   const [world, setWorld] = useState<World>();
 
-  let height = 100;
-  let width = 100;
-
   useEffect(() => {
     init().then(() => {
       const w = new World;
-      w.build_map(height, width, 53983);
+      w.build_map(height, width, 539483);
       w.set_entities();
-      setWorld(w);
       w.sort_entities();
-      console.log(w.get_tiles())
-      console.log(w.get_entities());
+      setWorld(w);
     })
   }, [])
 
@@ -28,7 +26,7 @@ export default function App(): React.JSX.Element {
         henlo testing testing
       </div>
       <div key="tilemap" id="tilemap">
-        <TileMap tileArray={world.get_tiles()} width={width} />
+        <TileMap world={world} width={width} />
       </div>
     </>
   ) : (
