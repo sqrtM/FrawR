@@ -2,6 +2,11 @@
 name = "rustlib"
 version = "0.1.0"
 edition = "2021"
+description = "a rust library for (ideally) fast computations"
+repository = "https://github.com/sqrtM/FrawR"
+license = "GPL 3.0"
+
+
 
 [lib]
 crate-type = ["cdylib"]
