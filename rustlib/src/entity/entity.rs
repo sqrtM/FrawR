@@ -13,14 +13,14 @@ pub struct Entity {
 }
 
 pub enum EntityType {
-    Player,
+    //Player,
     Enemy
 }
 
 impl EntityType {
     pub fn get(&self, point: Point, id: u32) -> Entity {
         match self {
-            EntityType::Player => Entity { location: point, char: '@', id, moves: true },
+            //EntityType::Player => Entity { location: point, char: '@', id, moves: true },
             EntityType::Enemy => Entity { location: point, char: 'W', id, moves: true },
         }
     }
