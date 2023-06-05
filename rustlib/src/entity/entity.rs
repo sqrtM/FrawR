@@ -8,19 +8,20 @@ use crate::tile::tile::Point;
 pub struct Entity {
     pub location: Point,
     pub char: char,
+    pub moves: bool,
     pub id: u32
 }
 
-enum EntityType {
+pub enum EntityType {
     Player,
     Enemy
 }
 
 impl EntityType {
-    fn get(&self, point: Point, id: u32) -> Entity {
+    pub fn get(&self, point: Point, id: u32) -> Entity {
         match self {
-            EntityType::Player => Entity { location: point, char: '@', id },
-            EntityType::Enemy => Entity { location: point, char: 'W', id },
+            EntityType::Player => Entity { location: point, char: '@', id, moves: true },
+            EntityType::Enemy => Entity { location: point, char: 'W', id, moves: true },
         }
     }
 }

@@ -3,13 +3,13 @@ mod tile;
 
 use std::cmp::Ordering;
 
-use entity::entity::Entity;
+use entity::entity::{Entity};
 use noise::{self, NoiseFn};
 use serde::Serialize;
 use tile::tile::{Point, Tile};
 use wasm_bindgen::prelude::*;
 
-use crate::tile::tile::TileType;
+use crate::{tile::tile::TileType, entity::entity::EntityType};
 
 #[wasm_bindgen]
 #[derive(Clone, Debug, PartialEq, Serialize)]
@@ -55,17 +55,11 @@ impl World {
 
     pub fn set_entities(&mut self) {
         self.entities = Vec::new();
-        self.entities.push(Entity {
-            location: Point { x: 50, y: 50 },
-            char: '@',
-            id: self.entities.len() as u32,
-        });
-        for i in 0..29 {
-            self.entities.push(Entity {
-                location: Point { x: i, y: i },
-                char: 'M',
-                id: self.entities.len() as u32,
-            })
+        for i in 1..29 {
+            self.entities.push(EntityType::Enemy.get(
+                Point { x: i, y: 5 },
+                i.try_into().unwrap()
+            ))
         }
     }
 
@@ -77,7 +71,8 @@ impl World {
         }
     }
 
-    pub fn get_entities(&self) -> JsValue {
+    pub fn get_entities(&mut self) -> JsValue {
+        Self::sort_entities(self);
         serde_wasm_bindgen::to_value(&self.entities).unwrap()
     }
 
@@ -102,6 +97,31 @@ impl World {
                 Ordering::Greater
             }
         });
+    }
+}
+
+#[wasm_bindgen]
+impl World {
+    pub fn take_turn(&mut self, action: u8) -> JsValue {
+        match action {
+            _ => {
+                Self::move_entities(self);
+            }
+        }
+        serde_wasm_bindgen::to_value(&self.entities).unwrap()
+    }
+
+    fn move_entities(&mut self) {
+        for i in &mut self.entities {
+            if i.moves { 
+                let action = (js_sys::Math::random() * 4.0) as u8;
+                if action == 0 {i.location.x += 1}
+                if action == 1 {i.location.x -= 1}
+                if action == 2 {i.location.y += 1}
+                if action == 3 {i.location.y -= 1}
+            }
+        }
+        Self::sort_entities(self)
     }
 }
 

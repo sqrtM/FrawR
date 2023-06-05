@@ -1,8 +1,9 @@
-import { Entity, Tile, World } from "rustlib";
+import { Entity, Tile, } from "rustlib";
 import TileRow from "./TileRow";
 
 type TileMapProps = {
-  world: World,
+  tiles: Tile[],
+  entities: Entity[],
   width: number
 }
 
@@ -20,12 +21,12 @@ export default function TileMap(props: TileMapProps): React.JSX.Element {
   return (
     <>
       {
-        splitIntoRows(props.world.get_tiles()).map((i, index) => {
+        splitIntoRows(props.tiles).map((i, index) => {
           /** @todo this is slow af */
-          let entitiesForThisRow = (props.world.get_entities() as Entity[]).filter(i => i.location.y === index);
+          let entitiesForThisRow = props.entities.filter(i => i.location.y === index);
           return (
             <div key={"row-" + index} id={"row-" + index}>
-              <TileRow row={i} tileIndex={index} entities={entitiesForThisRow.length > 0 ? entitiesForThisRow : undefined} />
+              <TileRow row={i} tileIndex={index} entities={entitiesForThisRow} />
             </div>
           )
         })
