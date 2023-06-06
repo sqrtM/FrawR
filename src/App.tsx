@@ -11,31 +11,24 @@ export default function App(): React.JSX.Element {
   const [tiles, setTiles] = useState<Tile[]>();
   const [entities, setEntities] = useState<Entity[]>();
 
-  const [clicks, setClicks] = useState<number>(0);
-
   useEffect(() => {
     init().then(() => {
       const w = new World;
       w.build_map(height, width, 539483);
       w.set_entities();
       setWorld(w);
-      setTiles(w.get_tiles());
-      setEntities(w.get_entities())
+      setTiles(w.get_tiles() as Tile[]);
+      setEntities(w.get_entities() as Entity[])
     })
   }, [])
 
-  useEffect(() => {
+  function handleKeyPresses() {
     if (world) {
       init().then(() => {
         world.take_turn(1);
         setEntities(world.get_entities())
       })
     }
-  }, [clicks])
-
-  function handleKeyPresses() {
-    console.log(clicks)
-    setClicks(clicks + 1)
   }
 
   return world && tiles && entities ? (

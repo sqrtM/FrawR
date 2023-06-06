@@ -34,8 +34,8 @@ const TileRow = memo(function TileRow(props: TileRowProps): React.JSX.Element {
   )
 }, areEqual)
 
-function areEqual(prevProps: TileRowProps, nextProps: TileRowProps) {
-  return prevProps.entities[0] == nextProps.entities[0]
+function areEqual(a: TileRowProps, b: TileRowProps) {
+  return a.entities.length === b.entities.length && a.entities.every((val, index) => val === b.entities[index]);
 }
 
 export default TileRow;

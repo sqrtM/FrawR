@@ -3,13 +3,13 @@ mod tile;
 
 use std::cmp::Ordering;
 
-use entity::entity::{Entity};
+use entity::entity::Entity;
 use noise::{self, NoiseFn};
 use serde::Serialize;
 use tile::tile::{Point, Tile};
 use wasm_bindgen::prelude::*;
 
-use crate::{tile::tile::TileType, entity::entity::EntityType};
+use crate::{entity::entity::{EntityType, Moves}, tile::tile::TileType};
 
 #[wasm_bindgen]
 #[derive(Clone, Debug, PartialEq, Serialize)]
@@ -56,10 +56,8 @@ impl World {
     pub fn set_entities(&mut self) {
         self.entities = Vec::new();
         for i in 1..29 {
-            self.entities.push(EntityType::Enemy.get(
-                Point { x: i, y: 5 },
-                i.try_into().unwrap()
-            ))
+            self.entities
+                .push(EntityType::Enemy.get(Point { x: i, y: 5 }, i.try_into().unwrap()))
         }
     }
 
@@ -113,12 +111,24 @@ impl World {
 
     fn move_entities(&mut self) {
         for i in &mut self.entities {
-            if i.moves { 
-                let action = (js_sys::Math::random() * 4.0) as u8;
-                if action == 0 {i.location.x += 1}
-                if action == 1 {i.location.x -= 1}
-                if action == 2 {i.location.y += 1}
-                if action == 3 {i.location.y -= 1}
+            // find a way to just check if it implements the @moves trait
+            if i.moves {
+                let action = (js_sys::Math::random() * 5.0) as u8;
+                if action == 0 {
+                    i.move_up()
+                }
+                if action == 1 {
+                    i.move_down()
+                }
+                if action == 2 {
+                    i.move_left()
+                }
+                if action == 3 {
+                    i.move_right()
+                }
+                if action == 4 {
+                    i.stay_still()
+                }
             }
         }
         Self::sort_entities(self)

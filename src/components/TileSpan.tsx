@@ -7,7 +7,6 @@ type TileSpanProps = {
 }
 
 const TileSpan = memo(function TileSpan(props: TileSpanProps): React.JSX.Element {
-  console.log("rerendered" + "_" + props.tile.location.x + "-" + props.tile.location.y)
   return (
     <>
       {
@@ -19,8 +18,8 @@ const TileSpan = memo(function TileSpan(props: TileSpanProps): React.JSX.Element
   )
 }, areEqual)
 
-function areEqual(prevProps: TileSpanProps, nextProps: TileSpanProps) {
-  return prevProps.entities[0] == nextProps.entities[0]
+function areEqual(a: TileSpanProps, b: TileSpanProps) {
+  return a.entities.length === b.entities.length && a.entities.every((val, index) => val === b.entities[index]);
 }
 
 export default TileSpan;
