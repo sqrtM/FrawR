@@ -10,7 +10,7 @@ use tile::tile::{Point, Tile};
 use wasm_bindgen::prelude::*;
 
 use crate::{
-    entity::entity::{EntityType, Moves},
+    entity::entity::{EntityType, Moves, StatusEffects},
     tile::tile::TileType,
 };
 
@@ -54,15 +54,7 @@ impl World {
     }
 
     pub fn set_entities(&mut self) {
-        let p = Entity {
-            location: Point { x: 0, y: 0 },
-            char: '@',
-            npc: false,
-            id: 0,
-            health: 100,
-            hunger: 100
-        };
-        self.entities = vec![p];
+        self.entities = vec![];
 
         for i in 1..29 {
             self.entities
@@ -72,18 +64,18 @@ impl World {
 
     #[wasm_bindgen(constructor)]
     pub fn new(width: i32, height: i32) -> Self {
-        let p = Entity {
-            location: Point { x: 0, y: 0 },
-            char: '@',
-            npc: true,
-            id: 0,
-            health: 100,
-            hunger: 100,
-        };
-        let e = { vec![p] };
+        let e = { vec![] };
         Self {
             tiles: { vec![] },
-            player: p,
+            player: Entity {
+                location: Point { x: 0, y: 0 },
+                char: '@',
+                npc: true,
+                id: 0,
+                health: 100,
+                hunger: 100,
+                status_effects: StatusEffects { hungry: false },
+            },
             entities: { e },
             width,
             height,
@@ -97,6 +89,10 @@ impl World {
 
     pub fn get_tiles(&self) -> JsValue {
         serde_wasm_bindgen::to_value(&self.tiles).unwrap()
+    }
+
+    pub fn get_player(&self) -> JsValue {
+        serde_wasm_bindgen::to_value(&self.player).unwrap()
     }
 
     /// sorts by row, then by col
@@ -132,40 +128,45 @@ impl World {
 
     /// NOT EFFICENT!!! VERY STINKY!!!!
     fn move_entities(&mut self, action: u8) {
+        if action == 0 {
+            self.player.move_up()
+        }
+        if action == 1 {
+            self.player.move_down()
+        }
+        if action == 2 {
+            self.player.move_left()
+        }
+        if action == 3 {
+            self.player.move_right()
+        }
+        if action == 4 {
+            self.player.stay_still()
+        }
+        log::info!("{:#?}", self.player.location);
         for i in &mut self.entities {
             // find a way to just check if it implements the @moves trait
-            if i.npc {
-                let rand = (js_sys::Math::random() * 5.0) as u8;
-                if rand == 0 {
-                    i.move_up()
-                }
-                if rand == 1 {
-                    i.move_down()
-                }
-                if rand == 2 {
-                    i.move_left()
-                }
-                if rand == 3 {
-                    i.move_right()
-                }
-                if rand == 4 {
-                    i.stay_still()
-                }
+            let rand = (js_sys::Math::random() * 5.0) as u8;
+            if rand == 0 {
+                i.move_up()
+            }
+            if rand == 1 {
+                i.move_down()
+            }
+            if rand == 2 {
+                i.move_left()
+            }
+            if rand == 3 {
+                i.move_right()
+            }
+            if rand == 4 {
+                i.stay_still()
+            }
+            if i.hunger > 0 {
+                i.hunger -= 1
             } else {
-                if action == 0 {
-                    i.move_up()
-                }
-                if action == 1 {
-                    i.move_down()
-                }
-                if action == 2 {
-                    i.move_left()
-                }
-                if action == 3 {
-                    i.move_right()
-                }
-                if action == 4 {
-                    i.stay_still()
+                if !i.status_effects.hungry {
+                    i.status_effects.hungry = true;
                 }
             }
         }

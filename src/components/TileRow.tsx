@@ -1,6 +1,6 @@
 import { Entity, Tile } from "rustlib";
 import TileSpan from "./TileSpan";
-import React, { memo } from "react";
+import React, { memo, useContext } from "react";
 
 type TileRowProps = {
   row: Tile[],

@@ -21,14 +21,14 @@ pub struct Point {
 #[wasm_bindgen]
 #[derive(Clone, Copy, Debug, PartialEq, Serialize)]
 pub enum TileType {
-    Floor = 0,
-    Slope = 1,
-    Wall = 2,
-    Mountain = 3,
-    Shore = 4,
-    Water = 5,
-    DeepWater = 6,
-    Default = 7,
+    Floor,
+    Slope,
+    Wall,
+    Mountain,
+    Shore,
+    Water,
+    DeepWater,
+    Default,
 }
 
 impl TileType {

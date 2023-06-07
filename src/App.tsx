@@ -5,10 +5,14 @@ import TileMap from "./components/TileMap";
 let height = 20;
 let width = 20;
 
+import { createContext } from 'react';
+export const PlayerContext = createContext<Entity>(new Entity);
+
 export default function App(): React.JSX.Element {
 
   const [world, setWorld] = useState<World>();
   const [tiles, setTiles] = useState<Tile[]>();
+  const [player, setPlayer] = useState<Entity>()
   const [entities, setEntities] = useState<Entity[]>();
 
   useEffect(() => {
@@ -19,6 +23,7 @@ export default function App(): React.JSX.Element {
       setWorld(w);
       setTiles(w.get_tiles() as Tile[]);
       setEntities(w.get_entities() as Entity[])
+      setPlayer(w.get_player() as Entity)
     })
   }, [])
 
@@ -28,17 +33,20 @@ export default function App(): React.JSX.Element {
       init().then(() => {
         world.take_turn(direction);
         setEntities(world.get_entities())
+        setPlayer(world.get_player())
       })
     }
   }
 
-  return world && tiles && entities ? (
+  return world && tiles && entities && player ? (
     <>
       <div style={{ backgroundColor: "red" }}>
         henlo testing testing
       </div>
       <div key="tilemap" id="tilemap" onKeyDown={handleKeyPresses} tabIndex={1}>
-        <TileMap tiles={tiles} entities={entities} width={width} />
+        <PlayerContext.Provider value={player}>
+          <TileMap tiles={tiles} entities={entities} width={width} />
+        </PlayerContext.Provider>
       </div>
     </>
   ) : (

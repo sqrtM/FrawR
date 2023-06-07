@@ -12,13 +12,13 @@ pub struct Entity {
     pub id: u32,
     pub health: u16,
     pub hunger: u8,
+    pub status_effects: StatusEffects
 }
 
-#[repr(u8)]
-#[derive(Clone, Debug, PartialEq, Serialize)]
-enum Status {
-    Hungry = 0,
-    Thirsty = 1,    
+#[wasm_bindgen]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize)]
+pub struct StatusEffects {
+    pub hungry: bool,
 }
 
 pub trait Moves {
@@ -52,15 +52,15 @@ impl Moves for Entity {
 }
 
 pub enum EntityType {
-    //Player,
+    Player,
     Enemy
 }
 
 impl EntityType {
     pub fn get(&self, point: Point, id: u32) -> Entity {
         match self {
-            //EntityType::Player => Entity { location: point, char: '@', id, moves: true },
-            EntityType::Enemy => Entity { location: point, char: 'W', id, npc: true, health: 100, hunger: 10 },
+            EntityType::Player => Entity { location: point, char: '@', id, npc: false, health: 100, hunger: 10, status_effects: StatusEffects { hungry: false } },
+            EntityType::Enemy => Entity { location: point, char: 'W', id, npc: true, health: 100, hunger: 10, status_effects: StatusEffects { hungry: false, }},
         }
     }
 }

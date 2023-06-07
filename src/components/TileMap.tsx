@@ -8,7 +8,6 @@ type TileMapProps = {
 }
 
 export default function TileMap(props: TileMapProps): React.JSX.Element {
-
   // this can probably be done faster... Rust?
   const splitIntoRows = (arr: Tile[]): Tile[][] => {
     let row: Tile[][] = [];
