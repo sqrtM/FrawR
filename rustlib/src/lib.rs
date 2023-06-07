@@ -21,7 +21,7 @@ pub struct World {
     entities: Vec<Entity>,
     player: Entity,
     width: i32,
-    height: i32
+    height: i32,
 }
 
 #[wasm_bindgen]
@@ -34,22 +34,16 @@ impl World {
                 let row = (i % self.width) as f64;
                 let col = (i as f64 / self.height as f64).floor();
                 let val = (simp.get([row, col]) * 100.) as i16;
-                let name = match val {
+                let tile_type = match val {
                     -30..=-10 => TileType::Wall,
                     -9..=15 => TileType::Slope,
                     16..=40 => TileType::Floor,
                     _ => TileType::Floor,
                 };
-                let char = match val {
-                    -500..=-30 => '#',
-                    -9..=15 => '/',
-                    16..=40 => '.',
-                    _ => '.',
-                };
                 Tile {
                     val,
-                    name,
-                    char,
+                    name: tile_type,
+                    char: tile_type.get_char(),
                     location: Point {
                         x: i % self.width,
                         y: i / self.width,
@@ -63,9 +57,10 @@ impl World {
         let p = Entity {
             location: Point { x: 0, y: 0 },
             char: '@',
-            NPC: false,
+            npc: false,
             id: 0,
             health: 100,
+            hunger: 100
         };
         self.entities = vec![p];
 
@@ -80,9 +75,10 @@ impl World {
         let p = Entity {
             location: Point { x: 0, y: 0 },
             char: '@',
-            NPC: true,
+            npc: true,
             id: 0,
             health: 100,
+            hunger: 100,
         };
         let e = { vec![p] };
         Self {
@@ -90,7 +86,7 @@ impl World {
             player: p,
             entities: { e },
             width,
-            height
+            height,
         }
     }
 
@@ -138,7 +134,7 @@ impl World {
     fn move_entities(&mut self, action: u8) {
         for i in &mut self.entities {
             // find a way to just check if it implements the @moves trait
-            if i.NPC {
+            if i.npc {
                 let rand = (js_sys::Math::random() * 5.0) as u8;
                 if rand == 0 {
                     i.move_up()
@@ -155,22 +151,22 @@ impl World {
                 if rand == 4 {
                     i.stay_still()
                 }
-            } else if !i.NPC {
-                    if action == 0 {
-                        i.move_up()
-                    }
-                    if action == 1 {
-                        i.move_down()
-                    }
-                    if action == 2 {
-                        i.move_left()
-                    }
-                    if action == 3 {
-                        i.move_right()
-                    }
-                    if action == 4 {
-                        i.stay_still()
-                    }
+            } else {
+                if action == 0 {
+                    i.move_up()
+                }
+                if action == 1 {
+                    i.move_down()
+                }
+                if action == 2 {
+                    i.move_left()
+                }
+                if action == 3 {
+                    i.move_right()
+                }
+                if action == 4 {
+                    i.stay_still()
+                }
             }
         }
         Self::sort_entities(self)

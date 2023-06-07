@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import init, { Entity, Tile, World, } from "rustlib";
 import TileMap from "./components/TileMap";
 
-let height = 200;
-let width = 200;
+let height = 20;
+let width = 20;
 
 export default function App(): React.JSX.Element {
 

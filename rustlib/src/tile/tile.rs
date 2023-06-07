@@ -24,4 +24,24 @@ pub enum TileType {
     Floor = 0,
     Slope = 1,
     Wall = 2,
+    Mountain = 3,
+    Shore = 4,
+    Water = 5,
+    DeepWater = 6,
+    Default = 7,
+}
+
+impl TileType {
+    pub fn get_char(&self) -> char {
+        match self {
+            TileType::Floor => '.',
+            TileType::Slope => '/',
+            TileType::Wall => '#',
+            TileType::Mountain => '^',
+            TileType::Shore => '%',
+            TileType::Water => '~',
+            TileType::DeepWater => '*',
+            TileType::Default => 'D',
+        }
+    }
 }

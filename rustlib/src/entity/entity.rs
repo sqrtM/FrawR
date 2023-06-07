@@ -8,9 +8,17 @@ use crate::tile::tile::Point;
 pub struct Entity {
     pub location: Point,
     pub char: char,
-    pub NPC: bool,
+    pub npc: bool,
     pub id: u32,
-    pub health: u16
+    pub health: u16,
+    pub hunger: u8,
+}
+
+#[repr(u8)]
+#[derive(Clone, Debug, PartialEq, Serialize)]
+enum Status {
+    Hungry = 0,
+    Thirsty = 1,    
 }
 
 pub trait Moves {
@@ -52,7 +60,7 @@ impl EntityType {
     pub fn get(&self, point: Point, id: u32) -> Entity {
         match self {
             //EntityType::Player => Entity { location: point, char: '@', id, moves: true },
-            EntityType::Enemy => Entity { location: point, char: 'W', id, NPC: true, health: 100 },
+            EntityType::Enemy => Entity { location: point, char: 'W', id, npc: true, health: 100, hunger: 10 },
         }
     }
 }
