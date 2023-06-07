@@ -22,7 +22,6 @@ export default function TileMap(props: TileMapProps): React.JSX.Element {
     <>
       {
         splitIntoRows(props.tiles).map((i, index) => {
-          /** @todo this is slow af */
           let entitiesForThisRow = props.entities.filter(i => i.location.y === index);
           return (
             <div key={"row-" + index} id={"row-" + index}>

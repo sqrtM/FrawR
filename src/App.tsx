@@ -13,8 +13,8 @@ export default function App(): React.JSX.Element {
 
   useEffect(() => {
     init().then(() => {
-      const w = new World;
-      w.build_map(height, width, 539483);
+      const w = new World(width, height);
+      w.build_map(539483);
       w.set_entities();
       setWorld(w);
       setTiles(w.get_tiles() as Tile[]);
@@ -22,10 +22,11 @@ export default function App(): React.JSX.Element {
     })
   }, [])
 
-  function handleKeyPresses() {
-    if (world) {
+  function handleKeyPresses(e: any) {
+    const direction = ["z", "s", "q", "d"].indexOf(e.key);
+    if (world && direction > -1) {
       init().then(() => {
-        world.take_turn(1);
+        world.take_turn(direction);
         setEntities(world.get_entities())
       })
     }
@@ -36,7 +37,7 @@ export default function App(): React.JSX.Element {
       <div style={{ backgroundColor: "red" }}>
         henlo testing testing
       </div>
-      <div key="tilemap" id="tilemap" onKeyDown={handleKeyPresses} tabIndex={-1}>
+      <div key="tilemap" id="tilemap" onKeyDown={handleKeyPresses} tabIndex={1}>
         <TileMap tiles={tiles} entities={entities} width={width} />
       </div>
     </>

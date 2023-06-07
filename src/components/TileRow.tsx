@@ -13,7 +13,6 @@ const TileRow = memo(function TileRow(props: TileRowProps): React.JSX.Element {
     <>
       {
         props.row.map((i, index) => {
-          /** @todo this is slow af */
           let entitiesForThisSpan = props.entities?.filter(i => i.location.x === index)
           return (
             <span
