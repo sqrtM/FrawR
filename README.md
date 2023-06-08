@@ -8,7 +8,13 @@ tricks:
 In that case, perhaps it should be a table of entities which we hold to be important?
 
 
-### stuff ive been learnign
-- useContext is useless for us in this case. Each component "class" which grabs context immediently rerenders on every tick.
+### journal
+- 07/06: useContext is useless for us in this case. Each component "class" which grabs context immediently rerenders on every tick.
 making it useless for such a large web project. Drilling the player state down will
 be necessary unfortunately, though it feels pretty inefficent.
+
+- 08/06: Firstly, when passing the player object around,  I set the type to `Player | false` because JS has a problem comparing undefineds.
+Setting it as false seems to have the same effect except it is also easy to compare quickly (which is important for the memo comps, which are slow.)
+I redefined the `World` struct to have a nested field for all living things. This will make it simpler to pass things around and reduce the number of calls
+between JS and Rust. It generally seems to be better to pass few Large objects than several small ones. Switching languages is expensive. Ideally, we 
+do it once per turn and no more.

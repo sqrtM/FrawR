@@ -5,6 +5,7 @@ type TileMapProps = {
   tiles: Tile[],
   entities: Entity[],
   width: number
+  player: Entity
 }
 
 export default function TileMap(props: TileMapProps): React.JSX.Element {
@@ -22,9 +23,10 @@ export default function TileMap(props: TileMapProps): React.JSX.Element {
       {
         splitIntoRows(props.tiles).map((i, index) => {
           let entitiesForThisRow = props.entities.filter(i => i.location.y === index);
+          let player = props.player.location.y === index ? props.player : false;
           return (
             <div key={"row-" + index} id={"row-" + index}>
-              <TileRow row={i} tileIndex={index} entities={entitiesForThisRow} />
+              <TileRow row={i} tileIndex={index} player={player} entities={entitiesForThisRow} />
             </div>
           )
         })

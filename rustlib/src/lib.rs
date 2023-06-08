@@ -10,16 +10,22 @@ use tile::tile::{Point, Tile};
 use wasm_bindgen::prelude::*;
 
 use crate::{
-    entity::entity::{EntityType, Moves, StatusEffects},
+    entity::entity::{EntityType, Moves},
     tile::tile::TileType,
 };
 
 #[wasm_bindgen]
 #[derive(Clone, Debug, PartialEq, Serialize)]
-pub struct World {
-    tiles: Vec<Tile>,
+pub struct Creatures {
     entities: Vec<Entity>,
     player: Entity,
+}
+
+#[wasm_bindgen]
+#[derive(Clone, Debug, PartialEq, Serialize)]
+pub struct World {
+    tiles: Vec<Tile>,
+    creatures: Creatures,
     width: i32,
     height: i32,
 }
@@ -54,37 +60,35 @@ impl World {
     }
 
     pub fn set_entities(&mut self) {
-        self.entities = vec![];
+        self.creatures.entities = vec![];
 
-        for i in 1..29 {
-            self.entities
+        for i in 1..200 {
+            self.creatures.entities
                 .push(EntityType::Enemy.get(Point { x: i, y: 5 }, i.try_into().unwrap()))
         }
     }
 
     #[wasm_bindgen(constructor)]
     pub fn new(width: i32, height: i32) -> Self {
-        let e = { vec![] };
-        Self {
+        let p: Entity = EntityType::Player.get(Point { x: 0, y: 0 }, 0);
+        let e: Vec<Entity> = { vec![] };
+        let mut w: World = World {
             tiles: { vec![] },
-            player: Entity {
-                location: Point { x: 0, y: 0 },
-                char: '@',
-                npc: true,
-                id: 0,
-                health: 100,
-                hunger: 100,
-                status_effects: StatusEffects { hungry: false },
+            creatures: Creatures {
+                player: p,
+                entities: { e },
             },
-            entities: { e },
             width,
             height,
-        }
+        };
+        w.build_map(389238);
+        w.set_entities();
+        w
     }
 
     pub fn get_entities(&mut self) -> JsValue {
         Self::sort_entities(self);
-        serde_wasm_bindgen::to_value(&self.entities).unwrap()
+        serde_wasm_bindgen::to_value(&self.creatures.entities).unwrap()
     }
 
     pub fn get_tiles(&self) -> JsValue {
@@ -92,12 +96,16 @@ impl World {
     }
 
     pub fn get_player(&self) -> JsValue {
-        serde_wasm_bindgen::to_value(&self.player).unwrap()
+        serde_wasm_bindgen::to_value(&self.creatures.player).unwrap()
+    }
+
+    pub fn get_all_creatures(&self) -> JsValue {
+        serde_wasm_bindgen::to_value(&self.creatures).unwrap()
     }
 
     /// sorts by row, then by col
     pub fn sort_entities(&mut self) {
-        let _ = &self.entities.sort_unstable_by(|a, b| {
+        let _ = &self.creatures.entities.sort_unstable_by(|a, b| {
             if a.location.y < b.location.y {
                 Ordering::Less
             } else if a.location.y == b.location.y {
@@ -123,28 +131,27 @@ impl World {
                 Self::move_entities(self, action);
             }
         }
-        serde_wasm_bindgen::to_value(&self.entities).unwrap()
+        serde_wasm_bindgen::to_value(&self.creatures.entities).unwrap()
     }
 
     /// NOT EFFICENT!!! VERY STINKY!!!!
     fn move_entities(&mut self, action: u8) {
         if action == 0 {
-            self.player.move_up()
+            self.creatures.player.move_up()
         }
         if action == 1 {
-            self.player.move_down()
+            self.creatures.player.move_down()
         }
         if action == 2 {
-            self.player.move_left()
+            self.creatures.player.move_left()
         }
         if action == 3 {
-            self.player.move_right()
+            self.creatures.player.move_right()
         }
         if action == 4 {
-            self.player.stay_still()
+            self.creatures.player.stay_still()
         }
-        log::info!("{:#?}", self.player.location);
-        for i in &mut self.entities {
+        for i in &mut self.creatures.entities {
             // find a way to just check if it implements the @moves trait
             let rand = (js_sys::Math::random() * 5.0) as u8;
             if rand == 0 {
@@ -171,6 +178,11 @@ impl World {
             }
         }
         Self::sort_entities(self)
+    }
+
+    pub fn take_turn_and_return(&mut self, action: u8) -> JsValue {
+        Self::take_turn(self, action);
+        Self::get_all_creatures(&self)
     }
 }
 

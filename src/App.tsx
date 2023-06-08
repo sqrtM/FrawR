@@ -2,11 +2,8 @@ import { useEffect, useState } from "react";
 import init, { Entity, Tile, World, } from "rustlib";
 import TileMap from "./components/TileMap";
 
-let height = 20;
-let width = 20;
-
-import { createContext } from 'react';
-export const PlayerContext = createContext<Entity>(new Entity);
+let height = 130;
+let width = 220;
 
 export default function App(): React.JSX.Element {
 
@@ -18,39 +15,36 @@ export default function App(): React.JSX.Element {
   useEffect(() => {
     init().then(() => {
       const w = new World(width, height);
-      w.build_map(539483);
-      w.set_entities();
       setWorld(w);
       setTiles(w.get_tiles() as Tile[]);
-      setEntities(w.get_entities() as Entity[])
-      setPlayer(w.get_player() as Entity)
+      let c: {entities: Entity[], player: Entity} = w.get_all_creatures()
+      setEntities(c.entities)
+      setPlayer(c.player)
     })
   }, [])
 
-  function handleKeyPresses(e: any) {
+  function handleKeyPresses(e: { key: string; }) {
     const direction = ["z", "s", "q", "d"].indexOf(e.key);
     if (world && direction > -1) {
       init().then(() => {
-        world.take_turn(direction);
-        setEntities(world.get_entities())
-        setPlayer(world.get_player())
+        let c: {entities: Entity[], player: Entity} = world.take_turn_and_return(direction);
+        setEntities(c.entities)
+        setPlayer(c.player)
       })
     }
   }
 
-  return world && tiles && entities && player ? (
+  return tiles && entities && player ? (
     <>
       <div style={{ backgroundColor: "red" }}>
         henlo testing testing
       </div>
       <div key="tilemap" id="tilemap" onKeyDown={handleKeyPresses} tabIndex={1}>
-        <PlayerContext.Provider value={player}>
-          <TileMap tiles={tiles} entities={entities} width={width} />
-        </PlayerContext.Provider>
+          <TileMap tiles={tiles} entities={entities} player={player} width={width} />
       </div>
     </>
   ) : (
-    <div style={{ backgroundColor: "blue" }}>
+    <div style={{ backgroundColor: "blue" }} onKeyDown={handleKeyPresses}>
       LOADING
     </div>
   )

@@ -14,7 +14,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rustlib": "file:rustlib/pkg",
-    "sass": "^1.62.1"
+    "sass": "^1.63.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",
