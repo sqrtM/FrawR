@@ -14,14 +14,14 @@ const TileRow = memo(function TileRow(props: TileRowProps): React.JSX.Element {
     <>
       {
         props.row.map((i, index) => {
-          let entitiesForThisSpan = props.entities?.filter(i => i.location.x === index)
+          let entitiesForThisSpan: Entity | false = props.entities?.find(i => i.location.x === index) || false
           let player = props.player && props.player.location.x === index ? props.player : false;
           return (
             <span
               key={"tile-" + i.location.x + "-" + i.location.y}
               id={"tile-" + i.location.x + "-" + i.location.y}
               style={
-                entitiesForThisSpan !== undefined && entitiesForThisSpan.length > 0 || player
+                entitiesForThisSpan !== undefined && entitiesForThisSpan || player
                   ? { "color": `white` }
                   : { "color": `#${(i.val + 400)}` }
               }

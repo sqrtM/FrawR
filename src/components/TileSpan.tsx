@@ -3,7 +3,7 @@ import { Entity, Tile } from "rustlib";
 
 type TileSpanProps = {
   tile: Tile,
-  entities: Entity[]
+  entities: Entity | false
   player: Entity | false
 }
 
@@ -14,8 +14,8 @@ const TileSpan = memo(function TileSpan(props: TileSpanProps): React.JSX.Element
   function selectChar(): string {
     return props.player
       ? props.player.char
-      : props.entities.length > 0
-        ? props.entities[0].char
+      : props.entities
+        ? props.entities.char
         : props.tile.char
   }
 
@@ -29,8 +29,10 @@ const TileSpan = memo(function TileSpan(props: TileSpanProps): React.JSX.Element
 }, areEqual)
 
 function areEqual(a: TileSpanProps, b: TileSpanProps) {
-  return a.entities.length === b.entities.length
-    && a.entities.every((val, index) => val === b.entities[index])
+  return a.entities === b.entities
+    && a.entities
+    && b.entities
+    && a.entities.char === b.entities.char
     && a.player === b.player;
 }
 
