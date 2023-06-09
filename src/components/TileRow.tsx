@@ -10,11 +10,15 @@ type TileRowProps = {
 }
 
 const TileRow = memo(function TileRow(props: TileRowProps): React.JSX.Element {
+
   // NOTE 
   // THESE ERRORS ARE NOT REAL
   // THEY ARE MISTAKES COMING FROM THE IMPORT FROM RUSTLIB
   // @todo: FIND A WAY TO IMPORT IT CORRECTLY.
   // IT DOES NOT RECOGNIZE ".x", BUT ARRAY INDEXING WORKS.
+
+  //console.log("rerender check" + props.tileIndex)
+
   return (
     <>
       {

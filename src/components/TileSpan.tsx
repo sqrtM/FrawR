@@ -9,31 +9,27 @@ type TileSpanProps = {
 
 const TileSpan = memo(function TileSpan(props: TileSpanProps): React.JSX.Element {
 
-  //console.log("rereder chek" + props.tile.location.x + "-" + props.tile.location.y)
-
-  function selectChar(): string {
-    return props.player
-      ? props.player.char
-      : props.entities
-        ? props.entities.char
-        : props.tile[1].char
-  }
+  //console.log("rereder chek" + props.tile[0][0] + "-" + props.tile[0][1])
 
   return (
     <>
       {
-        selectChar()
+        selectChar(props)
       }
     </>
   )
 }, areEqual)
 
+function selectChar(props: TileSpanProps): string {
+  return props.player
+    ? props.player.char
+    : props.entities
+      ? props.entities.char
+      : props.tile[1].char
+}
+
 function areEqual(a: TileSpanProps, b: TileSpanProps) {
-  return a.entities === b.entities
-    && a.entities
-    && b.entities
-    && a.entities.char === b.entities.char
-    && a.player === b.player;
+  return selectChar(a) === selectChar(b)
 }
 
 export default TileSpan;
