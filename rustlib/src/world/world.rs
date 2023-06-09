@@ -14,7 +14,6 @@ use crate::{
 
 #[wasm_bindgen]
 impl World {
-
     #[wasm_bindgen(constructor)]
     pub fn new(width: i32, height: i32) -> Self {
         let p: Entity = EntityType::Player.get(Point { x: 0, y: 0 }, 0);
@@ -38,8 +37,8 @@ impl World {
 
         let mut btree: BTreeMap<(i32, i32), Tile> = BTreeMap::new();
         for i in 0..self.width * self.height {
-            let row = i % self.width;
-            let col = i / self.height;
+            let row: i32 = i % self.width;
+            let col: i32 = i / self.height;
             let val: i16 = (simp.get([row as f64, col as f64]) * 100.) as i16;
             let tile_type: TileType = match val {
                 -30..=-10 => TileType::Wall,

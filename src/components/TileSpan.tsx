@@ -1,8 +1,8 @@
 import React, { memo } from "react";
-import { Entity, Point, Tile } from "rustlib";
+import { Entity, Tile } from "rustlib";
 
 type TileSpanProps = {
-  tile: [Point, Tile],
+  tile: [[x: number, y: number], Tile],
   entities: Entity | false
   player: Entity | false
 }

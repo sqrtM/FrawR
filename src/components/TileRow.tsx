@@ -1,21 +1,15 @@
-import { Entity, Point, Tile } from "rustlib";
+import { Entity, Tile } from "rustlib";
 import TileSpan from "./TileSpan";
 import React, { memo, } from "react";
 
 type TileRowProps = {
-  row: [Point, Tile][],
+  row: [[x: number, y: number], Tile][],
   tileIndex: number
   entity: Entity[]
   player: Entity | false
 }
 
 const TileRow = memo(function TileRow(props: TileRowProps): React.JSX.Element {
-
-  // NOTE 
-  // THESE ERRORS ARE NOT REAL
-  // THEY ARE MISTAKES COMING FROM THE IMPORT FROM RUSTLIB
-  // @todo: FIND A WAY TO IMPORT IT CORRECTLY.
-  // IT DOES NOT RECOGNIZE ".x", BUT ARRAY INDEXING WORKS.
 
   //console.log("rerender check" + props.tileIndex)
 

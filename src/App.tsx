@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import init, { Entity, Point, Tile, World, } from "rustlib";
+import init, { Entity, Tile, World, } from "rustlib";
 import TileMap from "./components/TileMap";
 
 let height = 40;
@@ -8,7 +8,7 @@ let width = 40;
 export default function App(): React.JSX.Element {
 
   const [world, setWorld] = useState<World>();
-  const [tiles, setTiles] = useState<[Point, Tile][]>();
+  const [tiles, setTiles] = useState<[[x: number, y: number], Tile][]>();
   const [player, setPlayer] = useState<Entity>()
   const [entities, setEntities] = useState<Entity[]>();
 

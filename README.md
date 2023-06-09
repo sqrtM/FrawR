@@ -18,3 +18,8 @@ Setting it as false seems to have the same effect except it is also easy to comp
 I redefined the `World` struct to have a nested field for all living things. This will make it simpler to pass things around and reduce the number of calls
 between JS and Rust. It generally seems to be better to pass few Large objects than several small ones. Switching languages is expensive. Ideally, we 
 do it once per turn and no more.
+
+- 09/06: When an `Entity` moves, it checks the tile it's going to move to. This doesn't seem to work with 100% accuracy and I'm not sure why.
+I tried changing the Entity field of World into a BTree, but wow, that is a bad idea, I think. 
+I keep putting off worldgen because it's very hard to do it the way I'm used to doing it. Maybe some bitshifts will work?
+Maybe now is the time to learn the good old BSP method? Or a better crawler? We'll see.
