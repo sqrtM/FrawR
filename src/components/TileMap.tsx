@@ -1,8 +1,8 @@
-import { Entity, Tile, } from "rustlib";
+import { Entity, Point, Tile, } from "rustlib";
 import TileRow from "./TileRow";
 
 type TileMapProps = {
-  tiles: Tile[],
+  tiles: [Point, Tile][],
   entities: Entity[],
   width: number
   player: Entity
@@ -10,8 +10,8 @@ type TileMapProps = {
 
 export default function TileMap(props: TileMapProps): React.JSX.Element {
   // this can probably be done faster... Rust?
-  const splitIntoRows = (arr: Tile[]): Tile[][] => {
-    let row: Tile[][] = [];
+  const splitIntoRows = (arr: [Point, Tile][]): [Point, Tile][][] => {
+    let row: [Point, Tile][][] = [];
     for (let i = 0; i < arr.length && arr.length > 0; i += props.width) {
       row.push(arr.slice(i, i + props.width))
     }
@@ -26,7 +26,7 @@ export default function TileMap(props: TileMapProps): React.JSX.Element {
           let player = props.player.location.y === index ? props.player : false;
           return (
             <div key={"row-" + index} id={"row-" + index}>
-              <TileRow row={i} tileIndex={index} player={player} entities={entitiesForThisRow} />
+              <TileRow row={i} tileIndex={index} player={player} entity={entitiesForThisRow} />
             </div>
           )
         })

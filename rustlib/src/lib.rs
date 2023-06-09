@@ -1,10 +1,9 @@
 mod entity;
 mod tile;
 
-use std::cmp::Ordering;
+use std::{cmp::Ordering, collections::BTreeMap};
 
 use entity::entity::Entity;
-use log::Log;
 use noise::{self, NoiseFn};
 use serde::Serialize;
 use struct_iterable::Iterable;
@@ -26,7 +25,7 @@ pub struct Creatures {
 #[wasm_bindgen]
 #[derive(Clone, Debug, PartialEq, Serialize)]
 pub struct World {
-    tiles: Vec<Tile>,
+    tiles: BTreeMap<(i32, i32), Tile>,
     creatures: Creatures,
     width: i32,
     height: i32,
@@ -37,28 +36,25 @@ impl World {
     pub fn build_map(&mut self, rand: u32) {
         let simp: noise::OpenSimplex = noise::OpenSimplex::new(rand);
 
-        self.tiles = (0..self.width * self.height)
-            .map(|i: i32| {
-                let row: f64 = (i % self.width) as f64;
-                let col: f64 = (i as f64 / self.height as f64).floor();
-                let val: i16 = (simp.get([row, col]) * 100.) as i16;
-                let tile_type: TileType = match val {
-                    -30..=-10 => TileType::Wall,
-                    -9..=15 => TileType::Slope,
-                    16..=40 => TileType::Floor,
-                    _ => TileType::Floor,
-                };
-                Tile {
-                    val,
-                    name: tile_type,
-                    char: tile_type.get_char(),
-                    location: Point {
-                        x: i % self.width,
-                        y: i / self.width,
-                    },
-                }
-            })
-            .collect::<Vec<Tile>>();
+        let mut hsmp: BTreeMap<(i32, i32), Tile> = BTreeMap::new();
+        for i in 0..self.width * self.height {
+            let row = i % self.width;
+            let col = i / self.height;
+            let val: i16 = (simp.get([row as f64, col as f64]) * 100.) as i16;
+            let tile_type: TileType = match val {
+                -30..=-10 => TileType::Wall,
+                -9..=15 => TileType::Slope,
+                16..=40 => TileType::Floor,
+                _ => TileType::Floor,
+            };
+            let tile: Tile = Tile {
+                val,
+                name: tile_type,
+                char: tile_type.get_char(),
+            };
+            hsmp.entry((row, col)).or_insert(tile);
+        }
+        self.tiles = hsmp;
     }
 
     pub fn set_entities(&mut self) {
@@ -76,7 +72,7 @@ impl World {
         let p: Entity = EntityType::Player.get(Point { x: 0, y: 0 }, 0);
         let e: Vec<Entity> = { vec![] };
         let mut w: World = World {
-            tiles: { vec![] },
+            tiles: { BTreeMap::new() },
             creatures: Creatures {
                 player: p,
                 entities: { e },
@@ -95,7 +91,8 @@ impl World {
     }
 
     pub fn get_tiles(&self) -> JsValue {
-        serde_wasm_bindgen::to_value(&self.tiles).unwrap()
+        let i: Vec<(&(i32, i32), &Tile)> = Vec::from_iter(&self.tiles);
+        serde_wasm_bindgen::to_value(&i).unwrap()
     }
 
     pub fn get_player(&self) -> JsValue {
@@ -144,7 +141,7 @@ impl World {
     fn move_player(&mut self, action: u8) {
         match action {
             0 => {
-                let res = Self::check_tile_for_entities(
+                let res: Option<Entity> = Self::check_tile_for_entities(
                     self,
                     Point {
                         x: self.creatures.player.location.x,
@@ -154,25 +151,25 @@ impl World {
                 if let None = res {
                     self.creatures.player.move_up()
                 } else {
-                    log::debug!("there's something there!!!!")
+                    ////log::debug!("there's something there!!!!")
                 }
             }
             1 => {
-                let res = Self::check_tile_for_entities(
+                let res: Option<Entity> = Self::check_tile_for_entities(
                     self,
                     Point {
                         x: self.creatures.player.location.x,
-                        y: self.creatures.player.location.y - 1,
+                        y: self.creatures.player.location.y + 1,
                     },
                 );
                 if let None = res {
                     self.creatures.player.move_down()
                 } else {
-                    log::debug!("there's something there!!!!")
+                    ////log::debug!("there's something there!!!!")
                 }
-            },
+            }
             2 => {
-                let res = Self::check_tile_for_entities(
+                let res: Option<Entity> = Self::check_tile_for_entities(
                     self,
                     Point {
                         x: self.creatures.player.location.x - 1,
@@ -182,11 +179,11 @@ impl World {
                 if let None = res {
                     self.creatures.player.move_left()
                 } else {
-                    log::debug!("there's something there!!!!")
+                    ////log::debug!("there's something there!!!!")
                 }
-            },
+            }
             3 => {
-                let res = Self::check_tile_for_entities(
+                let res: Option<Entity> = Self::check_tile_for_entities(
                     self,
                     Point {
                         x: self.creatures.player.location.x + 1,
@@ -196,31 +193,84 @@ impl World {
                 if let None = res {
                     self.creatures.player.move_right()
                 } else {
-                    log::debug!("there's something there!!!!")
+                    //////log::debug!("there's something there!!!!")
                 }
-            },
+            }
             _ => self.creatures.player.stay_still(),
         }
     }
 
     /// NOT EFFICENT!!! VERY STINKY!!!!
     fn move_entities(&mut self) {
-        
-        for i in &mut self.creatures.entities {
+        Self::sort_entities(self);
+
+        for i in 0..self.creatures.entities.len() {
             // find a way to just check if it implements the @moves trait
             let rand: u8 = (js_sys::Math::random() * 5.0) as u8;
             match rand {
-                0 => i.move_up(),
-                1 => i.move_down(),
-                2 => i.move_left(),
-                3 => i.move_right(),
-                _ => i.stay_still(),
+                0 => {
+                    let res: Option<Entity> = Self::check_tile_for_entities(
+                        self,
+                        Point {
+                            x: self.creatures.entities[i].location.x,
+                            y: self.creatures.entities[i].location.y - 1,
+                        },
+                    );
+                    if let None = res {
+                        self.creatures.entities[i].move_up()
+                    } else {
+                        //////log::debug!("there's something there!!!!")
+                    }
+                }
+                1 => {
+                    let res: Option<Entity> = Self::check_tile_for_entities(
+                        self,
+                        Point {
+                            x: self.creatures.entities[i].location.x,
+                            y: self.creatures.entities[i].location.y + 1,
+                        },
+                    );
+                    if let None = res {
+                        self.creatures.entities[i].move_down()
+                    } else {
+                        ////log::debug!("there's something there!!!!")
+                    }
+                }
+                2 => {
+                    let res: Option<Entity> = Self::check_tile_for_entities(
+                        self,
+                        Point {
+                            x: self.creatures.entities[i].location.x - 1,
+                            y: self.creatures.entities[i].location.y,
+                        },
+                    );
+                    if let None = res {
+                        self.creatures.entities[i].move_left()
+                    } else {
+                        ////log::debug!("there's something there!!!!")
+                    }
+                }
+                3 => {
+                    let res: Option<Entity> = Self::check_tile_for_entities(
+                        self,
+                        Point {
+                            x: self.creatures.entities[i].location.x + 1,
+                            y: self.creatures.entities[i].location.y,
+                        },
+                    );
+                    if let None = res {
+                        self.creatures.entities[i].move_right()
+                    } else {
+                        ////log::debug!("there's something there!!!!")
+                    }
+                }
+                _ => self.creatures.entities[i].stay_still(),
             }
-            if i.hunger > 0 {
-                i.hunger -= 1
+            if self.creatures.entities[i].hunger > 0 {
+                self.creatures.entities[i].hunger -= 1
             } else {
-                if !i.status_effects.hungry {
-                    i.status_effects.hungry = true;
+                if !self.creatures.entities[i].status_effects.hungry {
+                    self.creatures.entities[i].status_effects.hungry = true;
                 }
             }
         }
@@ -235,18 +285,14 @@ impl World {
 
 impl World {
     pub fn check_tile_for_entities(&mut self, p: Point) -> Option<Entity> {
-        self.sort_entities();
         let m: Result<usize, usize> = self
             .creatures
             .entities
             .binary_search_by(|i| i.location.partial_cmp(&p).expect("weird"));
         match m {
-            Ok(i) => {
-                log::info!("found!!!");
-                Some(self.creatures.entities[i])
-            }
+            Ok(i) => Some(self.creatures.entities[i]),
             Err(_) => {
-                log::info!("checked. nothing");
+                //log::info!("checked {:?}. nothing", p);
                 None
             }
         }

@@ -1,29 +1,34 @@
-import { Entity, Tile } from "rustlib";
+import { Entity, Point, Tile } from "rustlib";
 import TileSpan from "./TileSpan";
 import React, { memo, } from "react";
 
 type TileRowProps = {
-  row: Tile[],
+  row: [Point, Tile][],
   tileIndex: number
-  entities: Entity[]
+  entity: Entity[]
   player: Entity | false
 }
 
 const TileRow = memo(function TileRow(props: TileRowProps): React.JSX.Element {
+  // NOTE 
+  // THESE ERRORS ARE NOT REAL
+  // THEY ARE MISTAKES COMING FROM THE IMPORT FROM RUSTLIB
+  // @todo: FIND A WAY TO IMPORT IT CORRECTLY.
+  // IT DOES NOT RECOGNIZE ".x", BUT ARRAY INDEXING WORKS.
   return (
     <>
       {
         props.row.map((i, index) => {
-          let entitiesForThisSpan: Entity | false = props.entities?.find(i => i.location.x === index) || false
+          let entitiesForThisSpan: Entity | false = props.entity?.find(i => i.location.x === index) || false
           let player = props.player && props.player.location.x === index ? props.player : false;
           return (
             <span
-              key={"tile-" + i.location.x + "-" + i.location.y}
-              id={"tile-" + i.location.x + "-" + i.location.y}
+              key={"tile-" + i[0][0] + "-" + i[0][1]}
+              id={"tile-" + i[0][0] + "-" + i[0][1]}
               style={
                 entitiesForThisSpan !== undefined && entitiesForThisSpan || player
                   ? { "color": `white` }
-                  : { "color": `#${(i.val + 400)}` }
+                  : { "color": `#${(i[1].val + 400)}` }
               }
             >
               <TileSpan tile={i} entities={entitiesForThisSpan} player={player} />
@@ -36,7 +41,7 @@ const TileRow = memo(function TileRow(props: TileRowProps): React.JSX.Element {
 }, areEqual)
 
 function areEqual(a: TileRowProps, b: TileRowProps) {
-  return a.entities.length === b.entities.length && a.entities.every((val, index) => val === b.entities[index]) && a.player === b.player;
+  return a.entity.length === b.entity.length && a.entity.every((val, index) => val === b.entity[index]) && a.player === b.player;
 }
 
 export default TileRow;

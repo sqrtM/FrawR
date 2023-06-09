@@ -1,8 +1,8 @@
 import React, { memo } from "react";
-import { Entity, Tile } from "rustlib";
+import { Entity, Point, Tile } from "rustlib";
 
 type TileSpanProps = {
-  tile: Tile,
+  tile: [Point, Tile],
   entities: Entity | false
   player: Entity | false
 }
@@ -16,7 +16,7 @@ const TileSpan = memo(function TileSpan(props: TileSpanProps): React.JSX.Element
       ? props.player.char
       : props.entities
         ? props.entities.char
-        : props.tile.char
+        : props.tile[1].char
   }
 
   return (

@@ -6,7 +6,6 @@ use wasm_bindgen::prelude::wasm_bindgen;
 pub struct Tile {
     pub val: i16,
     pub name: TileType,
-    pub location: Point,
     pub char: char,
 }
 
