@@ -9,7 +9,7 @@ type TileSpanProps = {
 
 const TileSpan = memo(function TileSpan(props: TileSpanProps): React.JSX.Element {
 
-  //console.log("rereder chek" + props.tile[0][0] + "-" + props.tile[0][1])
+  //console.log("rereder chek" + props.tile[0].x + "-" + props.tile[0].y)
 
   return (
     <>

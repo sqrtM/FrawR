@@ -7,6 +7,7 @@ pub struct Tile {
     pub val: i16,
     pub name: TileType,
     pub char: char,
+    pub traversable: bool
 }
 
 #[wasm_bindgen]

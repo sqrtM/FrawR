@@ -48,6 +48,7 @@ impl World {
                 val,
                 name: tile_type,
                 char: tile_type.get_char(),
+                traversable: true,
             };
             btree.entry(pt).or_insert(tile);
         }

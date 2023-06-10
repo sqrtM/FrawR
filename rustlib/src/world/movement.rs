@@ -29,7 +29,7 @@ impl World {
 
 impl World {
     /// this is stinky but i think it works consistently
-    pub fn check_tile_for_entities(&mut self, p: Point) -> Option<Entity> {
+    pub fn check_point_for_entities(&mut self, p: Point) -> Option<Entity> {
         let m = self
             .creatures
             .entities
@@ -43,10 +43,46 @@ impl World {
                     && self.creatures.player.location.y == p.y
                 {
                     Some(self.creatures.player)
+                } else if let Some(m) = self.tiles.get(&p) {
+                    if !m.traversable {
+                        // for when "traversability" needs to be checked eventually.
+                        todo!();
+                    } else {
+                        None
+                    }
                 } else {
                     None
                 }
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::entity::entity::EntityType;
+
+    use super::*;
+
+    #[test]
+    fn collision_detected() {
+        let mut w = World::new(20, 20);
+
+        let p1 = Point { x: 1, y: 2 };
+        //let e1 = EntityType::Enemy.get(p1, 0);
+
+        let p2 = Point { x: 4893, y: 3432 };
+        let _e2 = EntityType::Enemy.get(p2, 0);
+
+        let p3 = Point { x: 13, y: 222 };
+        let _e3 = EntityType::Enemy.get(p1, 0);
+
+        let p4 = Point { x: 55, y: 55 };
+        //let e4 = EntityType::Enemy.get(p4, 0);
+
+        assert_eq!(w.check_point_for_entities(p1), None);
+        assert_eq!(w.check_point_for_entities(p2), None);
+        assert_eq!(w.check_point_for_entities(p3), None);
+        assert_eq!(w.check_point_for_entities(p4), None);
     }
 }
