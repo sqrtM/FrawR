@@ -1,4 +1,4 @@
-use super::entity::Entity;
+use super::entity::{Entity};
 
 pub trait Moves {
     fn move_up(&mut self);

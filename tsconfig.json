@@ -28,7 +28,7 @@
     "listFiles": false /* Print names of files part of the compilation. */,
     "pretty": true /* Stylize errors and messages using color and context. */,
   },
-  "include": ["src"],
+  "include": ["src", "src/*"],
   "exclude": ["node_modules/**"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "compileOnSave": true

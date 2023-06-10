@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import init, { Entity, Point, Tile, World, } from "rustlib";
-import TileMap from "./components/TileMap";
+import TileMap from "./components/gameboard/TileMap";
+import SideBar from "./components/sidebar/SideBar";
 
-let height = 100;
-let width = 100;
+let height = 35;
+let width = 50;
 
 export default function App(): React.JSX.Element {
 
@@ -17,7 +18,7 @@ export default function App(): React.JSX.Element {
       const w = new World(width, height);
       setWorld(w);
       setTiles(w.get_tiles());
-      let c: {entities: Entity[], player: Entity} = w.get_all_creatures()
+      let c: { entities: Entity[], player: Entity } = w.get_all_creatures()
       setEntities(c.entities)
       setPlayer(c.player)
     })
@@ -27,7 +28,7 @@ export default function App(): React.JSX.Element {
     const direction = ["z", "s", "q", "d", " "].indexOf(e.key);
     if (world && direction > -1) {
       init().then(() => {
-        let c: {entities: Entity[], player: Entity} = world.take_turn_and_return(direction);
+        let c: { entities: Entity[], player: Entity } = world.take_turn_and_return(direction);
         setEntities(c.entities)
         setPlayer(c.player)
       })
@@ -36,11 +37,11 @@ export default function App(): React.JSX.Element {
 
   return tiles && entities && player ? (
     <>
-      <div style={{ backgroundColor: "red" }}>
-        henlo testing testing
-      </div>
-      <div key="tilemap" id="tilemap" onKeyDown={handleKeyPresses} tabIndex={1}>
+      <div id="game-screen">
+        <div key="tilemap" id="tilemap" onKeyDown={handleKeyPresses} tabIndex={1}>
           <TileMap tiles={tiles} entities={entities} player={player} width={width} />
+        </div>
+        <SideBar playerInfo={player} />
       </div>
     </>
   ) : (

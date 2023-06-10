@@ -29,7 +29,7 @@ const TileRow = memo(function TileRow(props: TileRowProps): React.JSX.Element {
                   : { "color": `#${(i[1].val + 400)}` }
               }
             >
-              <TileSpan tile={i} entities={entitiesForThisSpan} player={player} />
+              <TileSpan tile={i} entity={entitiesForThisSpan} player={player} />
             </span>
           )
         })

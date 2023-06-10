@@ -12,7 +12,7 @@ use crate::{entity::entity::EntityType, tile::tile::TileType};
 impl World {
     #[wasm_bindgen(constructor)]
     pub fn new(width: i32, height: i32) -> Self {
-        let p: Entity = EntityType::Player.get(Point { x: 0, y: 0 }, 0);
+        let p: Entity = EntityType::Player.get(Point { x: 0, y: 0 });
         let e: Vec<Entity> = { vec![] };
         let mut w: World = World {
             tiles: { BTreeMap::new() },
@@ -58,10 +58,10 @@ impl World {
     pub fn set_entities(&mut self) {
         self.creatures.entities = vec![];
 
-        for i in 1..200 {
+        for i in 1..self.height {
             self.creatures
                 .entities
-                .push(EntityType::Enemy.get(Point { x: i, y: 5 }, i.try_into().unwrap()))
+                .push(EntityType::Enemy.get(Point { x: i, y: i }))
         }
     }
 

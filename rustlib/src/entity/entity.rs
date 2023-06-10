@@ -9,10 +9,8 @@ pub struct Entity {
     pub location: Point,
     pub char: char,
     pub npc: bool,
-    pub id: u32,
-    pub health: u16,
-    pub hunger: u8,
-    pub status_effects: StatusEffects
+    pub status_effects: StatusEffects,
+    pub status_bars: StatusBars,
 }
 
 #[wasm_bindgen]
@@ -21,16 +19,97 @@ pub struct StatusEffects {
     pub hungry: bool,
 }
 
+#[wasm_bindgen]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize)]
+pub struct StatusBars {
+    pub health: StatusBar,
+    pub mana: ManaBars,
+    pub hunger: StatusBar,
+    pub sanity: StatusBar,
+    pub rage: StatusBar,
+}
+
+#[wasm_bindgen]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize)]
+pub struct ManaBars {
+    pub alpha: StatusBar,
+    pub beta: StatusBar,
+    pub gamma: StatusBar,
+}
+
+#[wasm_bindgen]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize)]
+pub struct StatusBar {
+    pub max: u8,
+    pub current: u8,
+}
+
 pub enum EntityType {
     Player,
-    Enemy
+    Enemy,
 }
 
 impl EntityType {
-    pub fn get(&self, point: Point, id: u32) -> Entity {
+    pub fn get(&self, point: Point) -> Entity {
         match self {
-            EntityType::Player => Entity { location: point, char: '@', id, npc: false, health: 100, hunger: 10, status_effects: StatusEffects { hungry: false } },
-            EntityType::Enemy => Entity { location: point, char: 'W', id, npc: true, health: 100, hunger: 10, status_effects: StatusEffects { hungry: false, }},
+            EntityType::Player => Entity {
+                location: point,
+                char: '@',
+                npc: false,
+                status_effects: StatusEffects { hungry: false },
+                status_bars: StatusBars {
+                    health: StatusBar {
+                        max: 100,
+                        current: 100,
+                    },
+                    mana: ManaBars {
+                        alpha: StatusBar { max:100, current: 100 },
+                        beta: StatusBar { max: 100, current: 100 },
+                        gamma: StatusBar { max: 100, current: 100 },
+                    },
+                    hunger: StatusBar {
+                        max: 100,
+                        current: 100,
+                    },
+                    sanity: StatusBar {
+                        max: 100,
+                        current: 100,
+                    },
+                    rage: StatusBar {
+                        max: 100,
+                        current: 100,
+                    },
+                },
+            },
+            EntityType::Enemy => Entity {
+                location: point,
+                char: 'W',
+                npc: true,
+                status_effects: StatusEffects { hungry: false },
+                status_bars: StatusBars {
+                    health: StatusBar {
+                        max: 100,
+                        current: 100,
+                    },
+                    mana: ManaBars {
+                        alpha: StatusBar { max:100, current: 100 },
+                        beta: StatusBar { max: 100, current: 100 },
+                        gamma: StatusBar { max: 100, current: 100 },
+                    },
+                    hunger: StatusBar {
+                        max: 100,
+                        current: 100,
+                    },
+                    sanity: StatusBar {
+                        max: 100,
+                        current: 100,
+                    },
+                    rage: StatusBar {
+                        max: 100,
+                        current: 100,
+                    },
+                },
+            },
         }
     }
 }
