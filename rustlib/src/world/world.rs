@@ -1,16 +1,12 @@
-use wasm_bindgen::prelude::*;
+use crate::{entity::entity::Entity, tile::tile::Point, Creatures, Tile, World};
 use std::collections::BTreeMap;
-use crate::{ Tile, Creatures, entity::entity::Entity, tile::tile::Point, World};
+use wasm_bindgen::prelude::*;
 
-use std::{cmp::Ordering,};
+use std::cmp::Ordering;
 
 use noise::{self, NoiseFn};
 
-
-use crate::{
-    entity::{entity::EntityType},
-    tile::tile::TileType,
-};
+use crate::{entity::entity::EntityType, tile::tile::TileType};
 
 #[wasm_bindgen]
 impl World {
@@ -35,11 +31,13 @@ impl World {
     pub fn build_map(&mut self, rand: u32) {
         let simp: noise::OpenSimplex = noise::OpenSimplex::new(rand);
 
-        let mut btree: BTreeMap<(i32, i32), Tile> = BTreeMap::new();
+        let mut btree: BTreeMap<Point, Tile> = BTreeMap::new();
         for i in 0..self.width * self.height {
-            let row: i32 = i % self.width;
-            let col: i32 = i / self.height;
-            let val: i16 = (simp.get([row as f64, col as f64]) * 100.) as i16;
+            let pt: Point = Point {
+                x: i % self.width,
+                y: i / self.height,
+            };
+            let val: i16 = (simp.get([pt.x as f64, pt.y as f64]) * 100.) as i16;
             let tile_type: TileType = match val {
                 -30..=-10 => TileType::Wall,
                 -9..=15 => TileType::Slope,
@@ -51,7 +49,7 @@ impl World {
                 name: tile_type,
                 char: tile_type.get_char(),
             };
-            btree.entry((row, col)).or_insert(tile);
+            btree.entry(pt).or_insert(tile);
         }
         self.tiles = btree;
     }

@@ -1,9 +1,9 @@
-import { Entity, Tile } from "rustlib";
+import { Entity, Point, Tile } from "rustlib";
 import TileSpan from "./TileSpan";
 import React, { memo, } from "react";
 
 type TileRowProps = {
-  row: [[x: number, y: number], Tile][],
+  row: [Point, Tile][],
   tileIndex: number
   entity: Entity[]
   player: Entity | false
@@ -21,8 +21,8 @@ const TileRow = memo(function TileRow(props: TileRowProps): React.JSX.Element {
           let player = props.player && props.player.location.x === index ? props.player : false;
           return (
             <span
-              key={"tile-" + i[0][0] + "-" + i[0][1]}
-              id={"tile-" + i[0][0] + "-" + i[0][1]}
+              key={"tile-" + i[0].x + "-" + i[0].y}
+              id={"tile-" + i[0].x + "-" + i[0].y}
               style={
                 entitiesForThisSpan !== undefined && entitiesForThisSpan || player
                   ? { "color": `white` }

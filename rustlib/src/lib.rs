@@ -7,7 +7,7 @@ use std::collections::BTreeMap;
 use entity::entity::Entity;
 use serde::Serialize;
 use struct_iterable::Iterable;
-use tile::tile::Tile;
+use tile::tile::{Tile, Point};
 use wasm_bindgen::prelude::*;
 
 /// everything that lives in the world and organically changes.
@@ -22,7 +22,7 @@ pub struct Creatures {
 #[wasm_bindgen]
 #[derive(Clone, Debug, PartialEq, Serialize)]
 pub struct World {
-    tiles: BTreeMap<(i32, i32), Tile>,
+    tiles: BTreeMap<Point, Tile>,
     creatures: Creatures,
     width: i32,
     height: i32,

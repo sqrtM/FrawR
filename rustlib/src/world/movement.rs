@@ -1,5 +1,3 @@
-use std::cmp::Ordering;
-
 use crate::{entity::entity::Entity, tile::tile::Point, World};
 
 impl World {
@@ -30,22 +28,25 @@ impl World {
 }
 
 impl World {
+    /// this is stinky but i think it works consistently
     pub fn check_tile_for_entities(&mut self, p: Point) -> Option<Entity> {
-        let m: Result<usize, usize> = self
+        let m = self
             .creatures
             .entities
-            .binary_search_by(|i| i.location.partial_cmp(&p).expect("weird"));
+            .clone()
+            .into_iter()
+            .find(|i| i.location.x == p.x && i.location.y == p.y);
         match m {
-            Ok(i) => Some(self.creatures.entities[i]),
-            Err(_) => if self.creatures.player.location.cmp(&p) == Ordering::Equal {
-                Some(self.creatures.player)
-            } else {
-                None
+            Some(i) => Some(i),
+            None => {
+                if self.creatures.player.location.x == p.x
+                    && self.creatures.player.location.y == p.y
+                {
+                    Some(self.creatures.player)
+                } else {
+                    None
+                }
             }
         }
-        // match self.tiles.get(&(p.x, p.y)) {
-        //     Some(t) => Some(t),
-        //     None => None,
-        // }
-    }   
+    }
 }

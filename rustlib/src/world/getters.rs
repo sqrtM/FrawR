@@ -1,6 +1,6 @@
 use wasm_bindgen::{JsValue, prelude::wasm_bindgen};
 
-use crate::{World, tile::tile::Tile};
+use crate::{World, tile::tile::{Tile, Point}};
 
 #[wasm_bindgen]
 impl World {
@@ -10,7 +10,7 @@ impl World {
     }
 
     pub fn get_tiles(&self) -> JsValue {
-        let i: Vec<(&(i32, i32), &Tile)> = Vec::from_iter(&self.tiles);
+        let i: Vec<(&Point, &Tile)> = Vec::from_iter(&self.tiles);
         serde_wasm_bindgen::to_value(&i).unwrap()
     }
 
