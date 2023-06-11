@@ -11,40 +11,45 @@ impl World {
     pub fn take_player_turn(&mut self, action: u8) -> bool {
         let mut turn: bool = true;
         let targ: Point = Self::get_target_tile(self, self.creatures.player, action);
-        if action != 4 {
+        let traversable: bool = self.is_tile_traversable(targ);
+        if action != 4 && traversable == true {
             let res: Option<Entity> = Self::check_point_for_entities(self, targ);
             match res {
-                Some(_e) => { log::debug!("ENEMY HIT. SOMETHING SHOULD HAPPEN"); turn = false },
-                None => {
-                    match action {
-                        0 => self.creatures.player.move_up(),
-                        1 => self.creatures.player.move_down(),
-                        2 => self.creatures.player.move_left(),
-                        3 => self.creatures.player.move_right(),
-                        _ => { log::debug!("key not bound"); turn = false }
-                    }
+                Some(_e) => {
+                    log::debug!("ENEMY HIT. SOMETHING SHOULD HAPPEN");
+                    turn = false
                 }
+                None => match action {
+                    0 => self.creatures.player.move_up(),
+                    1 => self.creatures.player.move_down(),
+                    2 => self.creatures.player.move_left(),
+                    3 => self.creatures.player.move_right(),
+                    _ => {
+                        log::debug!("key not bound");
+                        turn = false
+                    }
+                },
             }
         } else {
             self.creatures.player.stay_still()
-        }  
-        turn 
+        }
+        turn
     }
 
     pub fn take_entity_turn(&mut self, i: usize, action: u8) -> () {
         let targ: Point = Self::get_target_tile(self, self.creatures.entities[i], action);
         let res: Option<Entity> = Self::check_point_for_entities(self, targ);
-        match res {
-            Some(_e) => (),
-            None => {
-                match action {
+        if self.is_tile_traversable(targ) {
+            match res {
+                Some(_e) => (),
+                None => match action {
                     0 => self.creatures.entities[i].move_up(),
                     1 => self.creatures.entities[i].move_down(),
                     2 => self.creatures.entities[i].move_left(),
                     3 => self.creatures.entities[i].move_right(),
                     4 => self.creatures.entities[i].stay_still(),
-                    _ => log::debug!("key not bound")
-                }
+                    _ => log::debug!("key not bound"),
+                },
             }
         }
     }

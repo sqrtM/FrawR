@@ -23,3 +23,5 @@ do it once per turn and no more.
 I tried changing the Entity field of World into a BTree, but wow, that is a bad idea, I think. 
 I keep putting off worldgen because it's very hard to do it the way I'm used to doing it. Maybe some bitshifts will work?
 Maybe now is the time to learn the good old BSP method? Or a better crawler? We'll see.
+
+- 11/06: world indexing fixed :) 

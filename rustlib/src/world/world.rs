@@ -23,41 +23,38 @@ impl World {
             width,
             height,
         };
-        w.build_map(389238);
+        w.build_map(43);
         w.set_entities();
         w
     }
 
     pub fn build_map(&mut self, rand: u32) {
         let simp: noise::OpenSimplex = noise::OpenSimplex::new(rand);
-
         let mut btree: BTreeMap<Point, Tile> = BTreeMap::new();
-        for i in 0..self.width * self.height {
-            let pt: Point = Point {
-                x: i % self.width,
-                y: i / self.height,
-            };
-            let val: i16 = (simp.get([pt.x as f64, pt.y as f64]) * 100.) as i16;
-            let tile_type: TileType = match val {
-                -30..=-10 => TileType::Wall,
-                -9..=15 => TileType::Slope,
-                16..=40 => TileType::Floor,
-                _ => TileType::Floor,
-            };
-            let tile: Tile = Tile {
-                val,
-                name: tile_type,
-                char: tile_type.get_char(),
-                traversable: true,
-            };
-            btree.entry(pt).or_insert(tile);
+        for i in 0..self.height {
+            for j in 0..self.width {
+                let pt = Point { x: j, y: i };
+                let val: i16 = (simp.get([pt.x as f64, pt.y as f64]) * 100.) as i16;
+                let tile_type: TileType = match val {
+                    -30..=-10 => TileType::Wall,
+                    -9..=15 => TileType::Slope,
+                    16..=40 => TileType::Floor,
+                    _ => TileType::Floor,
+                };
+                let tile: Tile = Tile {
+                    val,
+                    name: tile_type,
+                    char: tile_type.get_char(),
+                    traversable: true,
+                };
+                btree.entry(pt).or_insert(tile);
+            }
+            self.tiles = btree.clone();
         }
-        self.tiles = btree;
     }
 
     pub fn set_entities(&mut self) {
         self.creatures.entities = vec![];
-
         for i in 1..self.height {
             self.creatures
                 .entities
@@ -85,5 +82,15 @@ impl World {
                     Ordering::Greater
                 }
             });
+    }
+}
+
+impl World {
+    pub fn is_tile_traversable(&self, p: Point) -> bool {
+        let mut val: bool = false;
+        if let Some(tile) = self.tiles.get(&p) {
+            val = tile.traversable;
+        }
+        val
     }
 }
