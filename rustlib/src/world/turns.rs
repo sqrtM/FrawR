@@ -1,7 +1,7 @@
 use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
 use crate::{
-    entity::{entity::Entity, moves::Moves},
+    entity::moves::Moves,
     tile::tile::Point,
     World,
 };
@@ -9,14 +9,12 @@ use crate::{
 #[wasm_bindgen]
 impl World {
     pub fn take_player_turn(&mut self, action: u8) -> bool {
-        let mut turn: bool = true;
         let targ: Point = Self::get_target_tile(self, self.creatures.player, action);
-        let traversable: bool = self.is_tile_traversable(targ);
-        if action != 4 && traversable == true {
-            let res: Option<Entity> = Self::check_point_for_entities(self, targ);
-            match res {
-                Some(_e) => {
-                    log::debug!("ENEMY HIT. SOMETHING SHOULD HAPPEN");
+        let mut turn: bool = self.is_tile_traversable(targ);
+        if action != 4 && turn == true {
+            match Self::check_point_for_entities(self, targ) {
+                Some(e) => {
+                    log::debug!("{:?} HIT. SOMETHING SHOULD HAPPEN", e);
                     turn = false
                 }
                 None => match action {
@@ -38,9 +36,8 @@ impl World {
 
     pub fn take_entity_turn(&mut self, i: usize, action: u8) -> () {
         let targ: Point = Self::get_target_tile(self, self.creatures.entities[i], action);
-        let res: Option<Entity> = Self::check_point_for_entities(self, targ);
         if self.is_tile_traversable(targ) {
-            match res {
+            match Self::check_point_for_entities(self, targ) {
                 Some(_e) => (),
                 None => match action {
                     0 => self.creatures.entities[i].move_up(),

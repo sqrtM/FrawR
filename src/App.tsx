@@ -3,8 +3,8 @@ import init, { Entity, Point, Tile, World, } from "rustlib";
 import TileMap from "./components/gameboard/TileMap";
 import SideBar from "./components/sidebar/SideBar";
 
-let width = 33;
-let height = 21;
+let width = 50;
+let height = 35;
 
 export default function App(): React.JSX.Element {
 

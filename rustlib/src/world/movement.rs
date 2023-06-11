@@ -28,27 +28,22 @@ impl World {
 }
 
 impl World {
-    /// this is stinky but i think it works consistently
-    pub fn check_point_for_entities(&mut self, p: Point) -> Option<Entity> {
-        let m = self
+    /// recent refactor to use vec access of addresses rather than arrays.
+    /// i would imagine this is faster/safer on intuition, but this is untested
+    pub fn check_point_for_entities(&mut self, p: Point) -> Option<&Entity> {
+        match self
             .creatures
             .entities
             .clone()
             .into_iter()
-            .find(|i| i.location.x == p.x && i.location.y == p.y);
-        match m {
-            Some(i) => Some(i),
+            .position(|i| i.location.x == p.x && i.location.y == p.y)
+        {
+            Some(i) => Some(&self.creatures.entities[i]),
             None => {
                 if self.creatures.player.location.x == p.x
                     && self.creatures.player.location.y == p.y
                 {
-                    Some(self.creatures.player)
-                } else if let Some(m) = self.tiles.get(&p) {
-                    if !m.traversable {
-                        todo!();
-                    } else {
-                        None
-                    }
+                    Some(&self.creatures.player)
                 } else {
                     None
                 }

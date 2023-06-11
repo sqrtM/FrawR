@@ -8,9 +8,22 @@ use crate::tile::tile::Point;
 pub struct Entity {
     pub location: Point,
     pub char: char,
-    pub npc: bool,
+    pub mood: Mood,
     pub status_effects: StatusEffects,
     pub status_bars: StatusBars,
+    // eventually, we will implement a "target"
+    // to smooth out the wandering/hunting
+    // and update it with whatever it's going
+    // towards
+    //pub target: Point
+}
+
+#[wasm_bindgen]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize)]
+pub enum Mood {
+    PlayerControlled,
+    Hunting,
+    Wandering,
 }
 
 #[wasm_bindgen]
@@ -55,7 +68,7 @@ impl EntityType {
             EntityType::Player => Entity {
                 location: point,
                 char: '@',
-                npc: false,
+                mood: Mood::PlayerControlled,
                 status_effects: StatusEffects { hungry: false },
                 status_bars: StatusBars {
                     health: StatusBar {
@@ -84,7 +97,7 @@ impl EntityType {
             EntityType::Enemy => Entity {
                 location: point,
                 char: 'W',
-                npc: true,
+                mood: Mood::Wandering,
                 status_effects: StatusEffects { hungry: false },
                 status_bars: StatusBars {
                     health: StatusBar {
