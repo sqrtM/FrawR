@@ -21,7 +21,6 @@ export default function App(): React.JSX.Element {
       let c: { entities: Entity[], player: Entity } = w.get_all_creatures()
       setEntities(c.entities)
       setPlayer(c.player)
-      console.log(w)
     })
   }, [])
 
