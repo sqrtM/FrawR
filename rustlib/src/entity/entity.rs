@@ -76,9 +76,18 @@ impl EntityType {
                         current: 100,
                     },
                     mana: ManaBars {
-                        alpha: StatusBar { max:100, current: 100 },
-                        beta: StatusBar { max: 100, current: 100 },
-                        gamma: StatusBar { max: 100, current: 100 },
+                        alpha: StatusBar {
+                            max: 100,
+                            current: 100,
+                        },
+                        beta: StatusBar {
+                            max: 100,
+                            current: 100,
+                        },
+                        gamma: StatusBar {
+                            max: 100,
+                            current: 100,
+                        },
                     },
                     hunger: StatusBar {
                         max: 100,
@@ -86,11 +95,11 @@ impl EntityType {
                     },
                     sanity: StatusBar {
                         max: 100,
-                        current: 100,
+                        current: 20,
                     },
                     rage: StatusBar {
                         max: 100,
-                        current: 100,
+                        current: 40,
                     },
                 },
             },
@@ -105,9 +114,18 @@ impl EntityType {
                         current: 100,
                     },
                     mana: ManaBars {
-                        alpha: StatusBar { max:100, current: 100 },
-                        beta: StatusBar { max: 100, current: 100 },
-                        gamma: StatusBar { max: 100, current: 100 },
+                        alpha: StatusBar {
+                            max: 100,
+                            current: 100,
+                        },
+                        beta: StatusBar {
+                            max: 100,
+                            current: 100,
+                        },
+                        gamma: StatusBar {
+                            max: 100,
+                            current: 100,
+                        },
                     },
                     hunger: StatusBar {
                         max: 100,

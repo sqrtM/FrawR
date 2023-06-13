@@ -1,12 +1,13 @@
 use crate::{entity::entity::Entity, tile::tile::Point, Creatures, Tile, World};
-use std::collections::BTreeMap;
-use wasm_bindgen::prelude::*;
+use crate::{entity::entity::EntityType, tile::tile::TileType};
 
+use std::collections::BTreeMap;
 use std::cmp::Ordering;
+
+use wasm_bindgen::prelude::*;
 
 use noise::{self, NoiseFn};
 
-use crate::{entity::entity::EntityType, tile::tile::TileType};
 
 #[wasm_bindgen]
 impl World {

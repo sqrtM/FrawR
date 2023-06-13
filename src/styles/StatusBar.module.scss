@@ -1,0 +1,19 @@
+.health {
+    &--100 {
+        color: red
+    }
+
+    &--75 {
+        color: blue
+    }
+}
+
+.hunger {
+    &--100 {
+        color: orange
+    }
+
+    &--75 {
+        color: blue
+    }
+}

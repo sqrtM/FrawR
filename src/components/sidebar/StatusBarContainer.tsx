@@ -14,7 +14,7 @@ export default function StatusBarContainer({ statusBars }: StatusBarContainerPro
             if (prefix) {
                 key = prefix + key
             }
-            if (key == "mana") {
+            if (key == "mana") { // kind of hacky, since mana is the only nested one...
                 constructStatusBars(value, e, "mana:")
             } else {
                 ea = { ...ea, [key]: value }

@@ -1,10 +1,6 @@
 use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
-use crate::{
-    entity::moves::Moves,
-    tile::tile::Point,
-    World,
-};
+use crate::{entity::moves::Moves, tile::tile::Point, World};
 
 #[wasm_bindgen]
 impl World {
