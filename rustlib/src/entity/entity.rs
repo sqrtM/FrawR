@@ -24,6 +24,7 @@ pub enum Mood {
     PlayerControlled,
     Hunting,
     Wandering,
+    Dead,
 }
 
 #[wasm_bindgen]

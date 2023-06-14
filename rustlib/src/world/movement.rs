@@ -30,7 +30,7 @@ impl World {
 impl World {
     /// recent refactor to use vec access of addresses rather than arrays.
     /// i would imagine this is faster/safer on intuition, but this is untested
-    pub fn check_point_for_entities(&mut self, p: Point) -> Option<&Entity> {
+    pub fn check_point_for_entities(&mut self, p: Point) -> Option<&mut Entity> {
         match self
             .creatures
             .entities
@@ -38,12 +38,12 @@ impl World {
             .into_iter()
             .position(|i| i.location.x == p.x && i.location.y == p.y)
         {
-            Some(i) => Some(&self.creatures.entities[i]),
+            Some(i) => Some(&mut self.creatures.entities[i]),
             None => {
                 if self.creatures.player.location.x == p.x
                     && self.creatures.player.location.y == p.y
                 {
-                    Some(&self.creatures.player)
+                    Some(&mut self.creatures.player)
                 } else {
                     None
                 }

@@ -1,6 +1,6 @@
 use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
-use crate::{entity::moves::Moves, tile::tile::Point, World};
+use crate::{entity::{moves::Moves, entity::Entity}, tile::tile::Point, World};
 
 #[wasm_bindgen]
 impl World {
@@ -11,6 +11,7 @@ impl World {
             match Self::check_point_for_entities(self, targ) {
                 Some(e) => {
                     log::debug!("{:?} HIT. SOMETHING SHOULD HAPPEN", e);
+                    Self::handle_collision(e);
                     turn = false
                 }
                 None => match action {
@@ -55,5 +56,9 @@ impl World {
             }
         }
         Self::get_all_creatures(&self)
+    }
+
+    pub fn handle_collision(hit: &mut Entity) {
+        hit.status_bars.health.current = hit.status_bars.health.current - 10
     }
 }
