@@ -74,29 +74,29 @@ impl EntityType {
                 status_bars: StatusBars {
                     health: StatusBar {
                         max: 100,
-                        current: 100,
+                        current: 20,
                     },
                     mana: ManaBars {
                         alpha: StatusBar {
                             max: 100,
-                            current: 100,
+                            current: 43,
                         },
                         beta: StatusBar {
                             max: 100,
-                            current: 100,
+                            current: 66,
                         },
                         gamma: StatusBar {
                             max: 100,
-                            current: 100,
+                            current: 24,
                         },
                     },
                     hunger: StatusBar {
                         max: 100,
-                        current: 100,
+                        current: 45,
                     },
                     sanity: StatusBar {
                         max: 100,
-                        current: 20,
+                        current: 34,
                     },
                     rage: StatusBar {
                         max: 100,

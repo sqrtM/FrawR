@@ -1,4 +1,4 @@
-import React from "react"
+import React, { memo } from "react"
 import { StatusBar as StatusBarInfo } from "rustlib/rustlib"
 import styles from "../../styles/StatusBar.module.scss"
 
@@ -7,16 +7,16 @@ interface StatusBarProps {
     barInfo: StatusBarInfo
 }
 
-export default function StatusBar(props: StatusBarProps): React.JSX.Element {
+const StatusBar = memo(function StatusBar(props: StatusBarProps): React.JSX.Element {
 
-    function getPrefix(string: string) {
-        let prefix = ''
-        let ind = string.indexOf(':');
-        if (ind > 0) {
-            prefix = string.slice(0, ind)
-        }
-        return prefix
-    }
+    // function getPrefix(string: string) {
+    //     let prefix = ''
+    //     let ind = string.indexOf(':');
+    //     if (ind > 0) {
+    //         prefix = string.slice(0, ind)
+    //     }
+    //     return prefix
+    // }
 
     function nameWithoutPrefix(string: string) {
         return string.slice(string.indexOf(':') + 1)
@@ -60,4 +60,10 @@ export default function StatusBar(props: StatusBarProps): React.JSX.Element {
             }
         </div>
     )
+}, areEqual)
+
+function areEqual(a: StatusBarProps, b: StatusBarProps) {
+  return a.barInfo.current === b.barInfo.current && a.barInfo.max === b.barInfo.max;
 }
+
+export default StatusBar;

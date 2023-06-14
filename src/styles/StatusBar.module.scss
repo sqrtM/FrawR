@@ -1,19 +1,155 @@
 .health {
     &--100 {
-        color: red
+        color: green
     }
 
     &--75 {
-        color: blue
+        color: limegreen
+    }
+
+    &--50 {
+        color: yellow
+    }
+
+    &--25 {
+        color: orange
+    }
+
+    &--0 {
+        color: red
+    }
+}
+
+// mana
+.alpha {
+    &--100 {
+        color: #0000CC
+    }
+
+    &--75 {
+        color: #0033CC
+    }
+
+    &--50 {
+        color: #0066CC
+    }
+
+    &--25 {
+        color: #0099CC
+    }
+
+    &--0 {
+        color: #00CCCC
+    }
+}
+
+.beta {
+    &--100 {
+        color: #0DC20A
+    }
+
+    &--75 {
+        color: #3EC20A
+    }
+
+    &--50 {
+        color: #6EC20A
+    }
+
+    &--25 {
+        color: #9FC20A
+    }
+
+    &--0 {
+        color: #C2B50A
+    }
+}
+
+.gamma {
+    &--100 {
+        color: #FF48F3
+    }
+
+    &--75 {
+        color: #DF40FF
+    }
+
+    &--50 {
+        color: #AC40FF
+    }
+
+    &--25 {
+        color: #8C56F1
+    }
+
+    &--0 {
+        color: #8D84D6
     }
 }
 
 .hunger {
     &--100 {
-        color: orange
+        color: #EF131B
     }
 
     &--75 {
-        color: blue
+        color: #F6004A
+    }
+
+    &--50 {
+        color: #F60087
+    }
+
+    &--25 {
+        color: #F600C4
+    }
+
+    &--0 {
+        color: #F100FA
+    }
+}
+
+.sanity {
+    &--100 {
+        color: #FFFF45
+    }
+
+    &--75 {
+        color: #FFDD57
+    }
+
+    &--50 {
+        color: #FFC966
+    }
+
+    &--25 {
+        color: #FFB066
+    }
+
+    &--0 {
+        color: #FF9666
+    }
+}
+
+// colors not selected yet...
+.rage {
+    &--100 {
+        color: green
+    }
+
+    &--75 {
+        color: limegreen
+    }
+
+    &--50 {
+        color: yellow
+    }
+
+    &--25 {
+        color: orange
+    }
+
+    &--0 {
+        color: red
     }
 }
