@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import init, { Entity, Point, Tile, World, } from "rustlib";
+import React, { useEffect, useState } from "react";
+import init, { Entity, Point, Tile, World, } from '../rustlib/pkg';
 import TileMap from "./components/gameboard/TileMap";
 import SideBar from "./components/sidebar/SideBar";
 
-let width = 50;
-let height = 35;
+const width = 50;
+const height = 35;
 
 export default function App(): React.JSX.Element {
 
@@ -18,7 +18,7 @@ export default function App(): React.JSX.Element {
       const w = new World(width, height);
       setWorld(w);
       setTiles(w.get_tiles());
-      let c: { entities: Entity[], player: Entity } = w.get_all_creatures()
+      const c: { entities: Entity[], player: Entity } = w.get_all_creatures()
       setEntities(c.entities)
       setPlayer(c.player)
     })
@@ -28,7 +28,7 @@ export default function App(): React.JSX.Element {
     const direction = ["z", "s", "q", "d", " "].indexOf(e.key);
     if (world && direction > -1) {
       init().then(() => {
-        let c: { entities: Entity[], player: Entity } = world.take_turn_and_return(direction);
+        const c: { entities: Entity[], player: Entity } = world.take_turn_and_return(direction);
         setEntities(c.entities)
         setPlayer(c.player)
       })

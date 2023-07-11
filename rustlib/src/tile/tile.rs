@@ -11,11 +11,12 @@ pub struct Tile {
 }
 
 #[wasm_bindgen]
-#[derive(Clone, Copy, Debug, PartialEq, Serialize, Ord, PartialOrd, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize, Ord, PartialOrd, Eq, Hash)]
 pub struct Point {
     pub x: i32,
     pub y: i32,
 }
+
 
 #[repr(u8)]
 #[wasm_bindgen]

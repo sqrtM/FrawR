@@ -58,7 +58,8 @@ impl World {
         Self::get_all_creatures(&self)
     }
 
-    pub fn handle_collision(hit: &mut Entity) {
+    fn handle_collision(hit: &mut Entity) {
+        // placeholder...
         hit.status_bars.health.current = hit.status_bars.health.current - 10
     }
 }
