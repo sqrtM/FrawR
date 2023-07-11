@@ -18,6 +18,13 @@ pub struct Entity {
     //pub target: Point
 }
 
+impl Entity {
+    pub fn die(&mut self) {
+        self.char = '_';
+        self.mood = Mood::Dead;
+    }
+}
+
 #[wasm_bindgen]
 #[derive(Clone, Copy, Debug, PartialEq, Serialize)]
 pub enum Mood {

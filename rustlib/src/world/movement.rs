@@ -36,7 +36,7 @@ impl World {
             .entities
             .clone()
             .into_iter()
-            .position(|i| i.location.x == p.x && i.location.y == p.y)
+            .position(|i: Entity| i.location.x == p.x && i.location.y == p.y)
         {
             Some(i) => Some(&mut self.creatures.entities[i]),
             None => {

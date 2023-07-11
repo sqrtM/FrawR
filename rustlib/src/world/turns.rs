@@ -1,6 +1,6 @@
 use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
-use crate::{entity::{moves::Moves, entity::Entity}, tile::tile::Point, World};
+use crate::{entity::{moves::Moves, entity::{Entity, Mood}}, tile::tile::Point, World};
 
 #[wasm_bindgen]
 impl World {
@@ -36,14 +36,16 @@ impl World {
         if self.is_tile_traversable(targ) {
             match Self::check_point_for_entities(self, targ) {
                 Some(_e) => (),
-                None => match action {
-                    0 => self.creatures.entities[i].move_up(),
-                    1 => self.creatures.entities[i].move_down(),
-                    2 => self.creatures.entities[i].move_left(),
-                    3 => self.creatures.entities[i].move_right(),
-                    4 => self.creatures.entities[i].stay_still(),
-                    _ => log::debug!("key not bound"),
-                },
+                None => if self.creatures.entities[i].mood == Mood::Wandering {
+                    match action {
+                        0 => self.creatures.entities[i].move_up(),
+                        1 => self.creatures.entities[i].move_down(),
+                        2 => self.creatures.entities[i].move_left(),
+                        3 => self.creatures.entities[i].move_right(),
+                        4 => self.creatures.entities[i].stay_still(),
+                        _ => log::debug!("key not bound"),
+                    }
+                }
             }
         }
     }
@@ -60,6 +62,10 @@ impl World {
 
     fn handle_collision(hit: &mut Entity) {
         // placeholder...
-        hit.status_bars.health.current = hit.status_bars.health.current - 10
+        if hit.status_bars.health.current >= 10 {
+            hit.status_bars.health.current = hit.status_bars.health.current - 10
+        } else {
+            hit.die();
+        }
     }
 }
