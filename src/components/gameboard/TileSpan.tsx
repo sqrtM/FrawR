@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { Entity, Point, Tile } from "rustlib";
+import { Entity, Point, Tile } from '../../../rustlib/pkg';
 
 type TileSpanProps = {
   tile: [Point, Tile],

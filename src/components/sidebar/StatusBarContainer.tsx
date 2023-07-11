@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar as StatusBarInfo, StatusBars } from "rustlib"
+import { StatusBar as StatusBarInfo, StatusBars } from '../../../rustlib/pkg'
 import StatusBar from "./StatusBar";
 
 interface StatusBarContainerProps {

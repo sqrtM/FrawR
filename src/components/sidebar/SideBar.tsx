@@ -1,5 +1,5 @@
 import React from "react";
-import { Entity } from "rustlib/rustlib";
+import { Entity } from '../../../rustlib/pkg';
 import StatusBarContainer from "./StatusBarContainer";
 
 interface SideBarProps {

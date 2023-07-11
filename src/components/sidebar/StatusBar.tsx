@@ -1,5 +1,5 @@
 import React, { memo } from "react"
-import { StatusBar as StatusBarInfo } from "rustlib/rustlib"
+import { StatusBar as StatusBarInfo } from '../../../rustlib/pkg'
 import styles from "../../styles/StatusBar.module.scss"
 
 interface StatusBarProps {

@@ -1,4 +1,4 @@
-import { Entity, Point, Tile } from "rustlib";
+import { Entity, Point, Tile } from '../../../rustlib/pkg';
 import TileSpan from "./TileSpan";
 import React, { memo, } from "react";
 
@@ -17,8 +17,8 @@ const TileRow = memo(function TileRow(props: TileRowProps): React.JSX.Element {
     <>
       {
         props.row.map((i, index) => {
-          let entitiesForThisSpan: Entity | false = props.entity?.find(i => i.location.x === index) || false
-          let player = props.player && props.player.location.x === index ? props.player : false;
+          const entitiesForThisSpan: Entity | false = props.entity?.find(i => i.location.x === index) || false
+          const player = props.player && props.player.location.x === index ? props.player : false;
           return (
             <span
               key={"tile-" + i[0].x + "-" + i[0].y}
