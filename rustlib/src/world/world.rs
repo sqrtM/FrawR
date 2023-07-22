@@ -1,3 +1,4 @@
+use crate::entity::entity::Attributes;
 use crate::{entity::entity::Entity, tile::tile::Point, Creatures, Tile, World};
 use crate::{entity::entity::EntityType, tile::tile::TileType};
 
@@ -13,7 +14,7 @@ use noise::{self, NoiseFn};
 impl World {
     #[wasm_bindgen(constructor)]
     pub fn new(width: i32, height: i32) -> Self {
-        let p: Entity = EntityType::Player.get(Point { x: 0, y: 0 });
+        let p: Entity = EntityType::Player.create(Point { x: 0, y: 0 }, Attributes {constitution: 10, strength: 10, madness: 10, intelligence: 10});
         let e: Vec<Entity> = { vec![] };
         let mut w: World = World {
             tiles: { BTreeMap::new() },
@@ -59,7 +60,7 @@ impl World {
         for i in 1..self.height {
             self.creatures
                 .entities
-                .push(EntityType::Enemy.get(Point { x: i, y: i }))
+                .push(EntityType::Enemy.create(Point { x: i, y: i }, Attributes {constitution: 10, strength: 10, madness: 10, intelligence: 10}))
         }
     }
 

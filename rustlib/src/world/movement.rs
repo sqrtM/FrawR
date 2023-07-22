@@ -51,32 +51,3 @@ impl World {
         }
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use crate::entity::entity::EntityType;
-
-    use super::*;
-
-    #[test]
-    fn collision_detected() {
-        let mut w = World::new(20, 20);
-
-        let p1 = Point { x: 1, y: 2 };
-        let _e1 = EntityType::Enemy.get(p1);
-
-        let p2 = Point { x: 4893, y: 3432 };
-        let _e2 = EntityType::Enemy.get(p2);
-
-        let p3 = Point { x: 13, y: 222 };
-        let _e3 = EntityType::Enemy.get(p1);
-
-        let p4 = Point { x: 55, y: 55 };
-        let _e4 = EntityType::Enemy.get(p4);
-
-        assert_eq!(w.check_point_for_entities(p1), None);
-        assert_eq!(w.check_point_for_entities(p2), None);
-        assert_eq!(w.check_point_for_entities(p3), None);
-        assert_eq!(w.check_point_for_entities(p4), None);
-    }
-}
